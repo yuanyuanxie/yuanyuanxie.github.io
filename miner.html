@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miner Detail | HammerFans</title>
+<meta name="description" content="Full specs and solo odds for this home miner.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { darkMode:'class', theme:{ extend:{
+  colors:{ primary:'#02ffb5', dark:'#050505', panel:'#111111' },
+  fontFamily:{ mono:['JetBrains Mono','monospace'], header:['Oswald','sans-serif'], body:['Outfit','sans-serif'] },
+}}}
+</script>
+<style>
+  html { color-scheme: dark; }
+  body { background:#050505; }
+  .hairline { border-color: rgba(255,255,255,0.08); }
+  .num { font-family:'JetBrains Mono',monospace; font-variant-numeric: tabular-nums; }
+  .btn-press:active { transform: scale(0.98); }
+  a, button { transition: color .25s cubic-bezier(0.16,1,0.3,1), background-color .25s cubic-bezier(0.16,1,0.3,1), border-color .25s cubic-bezier(0.16,1,0.3,1), opacity .25s cubic-bezier(0.16,1,0.3,1); }
+  a:focus-visible, button:focus-visible { outline:2px solid #02ffb5; outline-offset:2px; }
+</style>
+</head>
+<body class="bg-dark text-neutral-300 font-body antialiased">
+
+<header class="sticky top-0 z-40 bg-dark/90 backdrop-blur border-b hairline">
+  <nav class="max-w-7xl mx-auto px-4 h-20 flex items-center gap-8" aria-label="Main">
+    <a href="index.html" class="flex items-center gap-2.5 shrink-0">
+      <img src="assets/img/hammer-logo.png" alt="HammerFans" class="w-9 h-9 object-contain" width="36" height="36">
+      <span class="font-header text-2xl tracking-wide text-white">HAMMER<span class="text-primary">FANS</span></span>
+    </a>
+    <div class="hidden lg:flex items-center gap-7 text-base">
+      <a href="index.html" class="hover:text-white" data-i18n="nav.home"></a>
+      <a href="calculator.html" class="hover:text-white" data-i18n="nav.calc"></a>
+      <a href="miners.html" class="text-white border-b-2 border-primary pb-0.5" data-i18n="nav.miners"></a>
+      <a href="blocks.html" class="hover:text-white" data-i18n="nav.blocks"></a>
+      <a href="learn.html" class="hover:text-white" data-i18n="nav.learn"></a>
+      <a href="about.html" class="hover:text-white" data-i18n="nav.about"></a>
+    </div>
+    <div class="ml-auto flex items-center gap-4">
+      <button type="button" class="langBtn text-base text-neutral-400 hover:text-white" aria-label="Switch language">EN</button>
+      <button type="button" id="menuBtn" class="lg:hidden p-2 text-neutral-300 hover:text-white" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current"></span>
+      </button>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="hidden lg:hidden border-t hairline bg-panel px-4 py-3">
+    <div class="grid gap-1 text-base">
+      <a href="index.html" class="py-2 hover:text-white" data-i18n="nav.home"></a>
+      <a href="calculator.html" class="py-2 hover:text-white" data-i18n="nav.calc"></a>
+      <a href="miners.html" class="py-2 text-white" data-i18n="nav.miners"></a>
+      <a href="blocks.html" class="py-2 hover:text-white" data-i18n="nav.blocks"></a>
+      <a href="learn.html" class="py-2 hover:text-white" data-i18n="nav.learn"></a>
+      <a href="about.html" class="py-2 hover:text-white" data-i18n="nav.about"></a>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4">
+
+<nav class="pt-6 text-xs text-neutral-500" aria-label="Breadcrumb">
+  <a href="miners.html" class="hover:text-primary" data-i18n="nav.miners"></a>
+  <span class="mx-2">/</span><span id="crumb" class="text-neutral-300">-</span>
+</nav>
+
+<div class="pt-6 pb-10 grid lg:grid-cols-12 gap-10">
+  <div class="lg:col-span-6">
+    <p id="dBrand" class="text-sm text-neutral-500">-</p>
+    <h1 id="dModel" class="font-header text-4xl md:text-5xl text-white mt-1">-</h1>
+    <p id="dDesc" class="mt-4 text-neutral-400 leading-relaxed max-w-[52ch]">-</p>
+    <div class="mt-8 grid grid-cols-2 gap-px bg-white/5 border hairline rounded-lg overflow-hidden">
+      <div class="bg-panel p-4"><p class="text-xs text-neutral-500" data-i18n="sp.hash"></p><p id="dHash" class="num text-lg text-white font-bold mt-1">-</p></div>
+      <div class="bg-panel p-4"><p class="text-xs text-neutral-500" data-i18n="sp.power"></p><p id="dPower" class="num text-lg text-white font-bold mt-1">-</p></div>
+      <div class="bg-panel p-4"><p class="text-xs text-neutral-500" data-i18n="sp.algo"></p><p id="dAlgo" class="num text-lg text-white font-bold mt-1">-</p></div>
+      <div class="bg-panel p-4"><p class="text-xs text-neutral-500" data-i18n="sp.noise"></p><p id="dNoise" class="num text-lg text-white font-bold mt-1">-</p></div>
+      <div class="bg-panel p-4"><p class="text-xs text-neutral-500" data-i18n="sp.net"></p><p id="dNet" class="text-lg text-white font-bold mt-1">-</p></div>
+      <div class="bg-panel p-4"><p class="text-xs text-neutral-500" data-i18n="sp.price"></p><p id="dPrice" class="num text-lg text-white font-bold mt-1">-</p></div>
+    </div>
+    <p class="mt-3 text-xs text-neutral-600" data-i18n="sp.src"></p>
+  </div>
+
+  <div class="lg:col-span-6">
+    <div class="bg-panel border hairline rounded-lg p-6">
+      <div class="flex items-baseline justify-between">
+        <h2 class="text-sm text-neutral-400" data-i18n="odds.h"></h2>
+        <span class="text-[11px] text-neutral-600" data-i18n="snapshot"></span>
+      </div>
+      <div class="mt-5 grid grid-cols-3 gap-4">
+        <div><p class="text-xs text-neutral-500" data-i18n="odds.day"></p><p id="oDay" class="num text-lg text-primary font-bold mt-1 break-all">-</p></div>
+        <div><p class="text-xs text-neutral-500" data-i18n="odds.month"></p><p id="oMonth" class="num text-lg text-white font-bold mt-1 break-all">-</p></div>
+        <div><p class="text-xs text-neutral-500" data-i18n="odds.year"></p><p id="oYear" class="num text-lg text-white font-bold mt-1 break-all">-</p></div>
+      </div>
+      <div class="mt-5 border-t hairline pt-5 grid grid-cols-2 gap-4">
+        <div><p class="text-xs text-neutral-500" data-i18n="odds.cost"></p><p id="oCost" class="num text-lg text-white font-bold mt-1">-</p></div>
+        <div><p class="text-xs text-neutral-500" data-i18n="odds.hpd"></p><p id="oHpd" class="num text-lg text-white font-bold mt-1">-</p></div>
+      </div>
+      <a href="calculator.html" class="btn-press mt-6 inline-block bg-primary text-black font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 text-sm" data-i18n="odds.btn"></a>
+    </div>
+    <div class="mt-4 bg-panel border hairline rounded-lg p-6">
+      <h2 class="text-sm text-neutral-400" data-i18n="vs.h"></h2>
+      <ul id="vsList" class="mt-4 grid gap-2 text-sm"></ul>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="border-t hairline bg-panel">
+  <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
+    <div>
+      <p class="font-header text-lg text-white">HAMMER<span class="text-primary">FANS</span></p>
+      <p class="mt-3 text-neutral-500 leading-relaxed" data-i18n="footer.tag"></p>
+    </div>
+    <div>
+      <p class="text-neutral-400 mb-3" data-i18n="footer.site"></p>
+      <div class="grid grid-cols-2 gap-2 text-neutral-500">
+        <a href="calculator.html" class="hover:text-primary" data-i18n="nav.calc"></a>
+        <a href="miners.html" class="hover:text-primary" data-i18n="nav.miners"></a>
+        <a href="blocks.html" class="hover:text-primary" data-i18n="nav.blocks"></a>
+        <a href="learn.html" class="hover:text-primary" data-i18n="nav.learn"></a>
+      </div>
+    </div>
+    <div>
+      <p class="text-neutral-400 mb-3" data-i18n="footer.legal"></p>
+      <p class="text-neutral-500 leading-relaxed text-xs" data-i18n="footer.disc"></p>
+    </div>
+  </div>
+  <div class="border-t hairline"><p class="max-w-7xl mx-auto px-4 py-4 text-xs text-neutral-600">2026 HammerFans</p></div>
+</footer>
+
+<script>
+window.HF_PAGE_DICT = {
+  zh: {
+    'sp.hash':'算力','sp.power':'功耗','sp.algo':'算法','sp.noise':'噪音','sp.net':'联网','sp.price':'参考价',
+    'sp.src':'规格来源：品牌官网与公开数据库，最后核验 2026-07。',
+    'odds.h':'这台机器的赔率','odds.day':'每天中块','odds.month':'每月','odds.year':'每年',
+    'odds.cost':'月电费 ($0.10/kWh)','odds.hpd':'每$算力','odds.btn':'用它算完整概率',
+    'vs.h':'同算法可比机型','vs.day':'每天',
+    'silent':'近无声',
+  },
+  en: {
+    'sp.hash':'Hashrate','sp.power':'Power','sp.algo':'Algorithm','sp.noise':'Noise','sp.net':'Network','sp.price':'Price',
+    'sp.src':'Specs from vendor sites and public databases, last verified 2026-07.',
+    'odds.h':'Odds for this miner','odds.day':'Daily block odds','odds.month':'Monthly','odds.year':'Yearly',
+    'odds.cost':'Monthly power ($0.10/kWh)','odds.hpd':'Hash per $','odds.btn':'Open in calculator',
+    'vs.h':'Comparable models (same algorithm)','vs.day':'daily',
+    'silent':'near silent',
+  }
+};
+</script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+const id = new URLSearchParams(location.search).get('id') || 'bc04';
+const m = HF_MINERS.find(x=>x.id===id) || HF_MINERS[1];
+function oddsOverDays(m, days){
+  const perBlock = m.algo==='sha256' ? HF_SNAPSHOT.btcNetTHs/m.ths : HF_SNAPSHOT.dogeNetMHs/m.mhs;
+  const bpd = m.algo==='sha256' ? 144 : 1440;
+  const p = 1/perBlock;
+  return 1/(1-Math.pow(1-p, bpd*days));
+}
+function render(){
+  document.title = m.brand+' '+m.model+' | HammerFans';
+  document.getElementById('crumb').textContent = m.brand+' '+m.model;
+  document.getElementById('dBrand').textContent = m.brand + (m.hammer ? (HF_LANG==='zh'?'（本站主队）':' (home team)') : '');
+  document.getElementById('dModel').textContent = m.model;
+  document.getElementById('dDesc').textContent = HF_LANG==='en' ? m.en : m.zh;
+  document.getElementById('dHash').textContent = m.hDisp;
+  document.getElementById('dPower').textContent = m.watts+'W';
+  document.getElementById('dAlgo').textContent = m.algo==='sha256'?'SHA-256':'Scrypt';
+  document.getElementById('dNoise').textContent = m.noise===0 ? t('silent') : m.noiseTxt;
+  document.getElementById('dNet').textContent = (HF_LANG==='en'&&m.netEn)?m.netEn:m.net;
+  document.getElementById('dPrice').textContent = '$'+m.price;
+  const coin = m.algo==='scrypt' ? ' (DOGE)' : '';
+  document.getElementById('oDay').textContent = fmtOdds(oddsOverDays(m,1)) + coin;
+  document.getElementById('oMonth').textContent = fmtOdds(oddsOverDays(m,30));
+  document.getElementById('oYear').textContent = fmtOdds(oddsOverDays(m,365));
+  document.getElementById('oCost').textContent = '$'+minerMonthlyCost(m,0.10).toFixed(1);
+  document.getElementById('oHpd').textContent = minerHashPerDollar(m).toFixed(1)+' GH/$';
+  // 同算法对比
+  const peers = HF_MINERS.filter(x=>x.algo===m.algo && x.id!==m.id).slice(0,4);
+  document.getElementById('vsList').innerHTML = peers.map(p=>
+    '<li class="flex items-baseline justify-between gap-4 border-b hairline pb-2">'+
+    '<a href="miner.html?id='+p.id+'" class="'+(p.hammer?'text-primary':'text-white')+' hover:underline">'+p.brand+' '+p.model+'</a>'+
+    '<span class="num text-xs text-neutral-500">'+p.hDisp+' · '+fmtOdds(minerDailyOdds(p))+' '+t('vs.day')+'</span></li>'
+  ).join('');
+}
+window.onLangChange = render;
+</script>
+</body>
+</html>

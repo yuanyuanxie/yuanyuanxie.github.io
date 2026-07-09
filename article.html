@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Mining Really Is | HammerFans</title>
+<meta name="description" content="No technical background needed. One read and the whole logic of home mining clicks.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { darkMode:'class', theme:{ extend:{
+  colors:{ primary:'#02ffb5', dark:'#050505', panel:'#111111' },
+  fontFamily:{ mono:['JetBrains Mono','monospace'], header:['Oswald','sans-serif'], body:['Outfit','sans-serif'] },
+}}}
+</script>
+<style>
+  html { color-scheme: dark; }
+  body { background:#050505; }
+  .hairline { border-color: rgba(255,255,255,0.08); }
+  .num { font-family:'JetBrains Mono',monospace; font-variant-numeric: tabular-nums; }
+  .btn-press:active { transform: scale(0.98); }
+  a, button { transition: color .25s cubic-bezier(0.16,1,0.3,1), background-color .25s cubic-bezier(0.16,1,0.3,1), border-color .25s cubic-bezier(0.16,1,0.3,1), opacity .25s cubic-bezier(0.16,1,0.3,1); }
+  a:focus-visible, button:focus-visible { outline:2px solid #02ffb5; outline-offset:2px; }
+</style>
+</head>
+<body class="bg-dark text-neutral-300 font-body antialiased">
+
+<header class="sticky top-0 z-40 bg-dark/90 backdrop-blur border-b hairline">
+  <nav class="max-w-7xl mx-auto px-4 h-20 flex items-center gap-8" aria-label="Main">
+    <a href="index.html" class="flex items-center gap-2.5 shrink-0">
+      <img src="assets/img/hammer-logo.png" alt="HammerFans" class="w-9 h-9 object-contain" width="36" height="36">
+      <span class="font-header text-2xl tracking-wide text-white">HAMMER<span class="text-primary">FANS</span></span>
+    </a>
+    <div class="hidden lg:flex items-center gap-7 text-base">
+      <a href="index.html" class="hover:text-white" data-i18n="nav.home"></a>
+      <a href="calculator.html" class="hover:text-white" data-i18n="nav.calc"></a>
+      <a href="miners.html" class="hover:text-white" data-i18n="nav.miners"></a>
+      <a href="blocks.html" class="hover:text-white" data-i18n="nav.blocks"></a>
+      <a href="learn.html" class="text-white border-b-2 border-primary pb-0.5" data-i18n="nav.learn"></a>
+      <a href="about.html" class="hover:text-white" data-i18n="nav.about"></a>
+    </div>
+    <div class="ml-auto flex items-center gap-4">
+      <button type="button" class="langBtn text-base text-neutral-400 hover:text-white" aria-label="Switch language">EN</button>
+      <button type="button" id="menuBtn" class="lg:hidden p-2 text-neutral-300 hover:text-white" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current"></span>
+      </button>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="hidden lg:hidden border-t hairline bg-panel px-4 py-3">
+    <div class="grid gap-1 text-base">
+      <a href="index.html" class="py-2 hover:text-white" data-i18n="nav.home"></a>
+      <a href="calculator.html" class="py-2 hover:text-white" data-i18n="nav.calc"></a>
+      <a href="miners.html" class="py-2 hover:text-white" data-i18n="nav.miners"></a>
+      <a href="blocks.html" class="py-2 hover:text-white" data-i18n="nav.blocks"></a>
+      <a href="learn.html" class="py-2 text-white" data-i18n="nav.learn"></a>
+      <a href="about.html" class="py-2 hover:text-white" data-i18n="nav.about"></a>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-10">
+
+<article class="lg:col-span-8 pt-12 pb-16 max-w-[70ch]">
+  <nav class="text-xs text-neutral-500" aria-label="Breadcrumb">
+    <a href="learn.html" class="hover:text-primary" data-i18n="nav.learn"></a>
+    <span class="mx-2">/</span><span class="text-neutral-300" data-i18n="a.crumb"></span>
+  </nav>
+  <p class="mt-6 text-xs text-neutral-500"><span data-i18n="a.cat"></span> · 2026-07 · <span data-i18n="a.read"></span></p>
+  <h1 class="font-header text-3xl md:text-4xl text-white mt-3 leading-tight" data-i18n="a.h1"></h1>
+  <p class="mt-4 text-lg text-neutral-400" data-i18n="a.lead"></p>
+
+  <img src="https://picsum.photos/id/180/1200/630" alt="" class="mt-8 w-full aspect-[1.9/1] object-cover rounded-lg border hairline" width="1200" height="630">
+
+  <h2 class="font-header text-2xl text-white mt-10" data-i18n="a.s1h"></h2>
+  <p class="mt-4 leading-relaxed" data-i18n="a.s1p1"></p>
+  <p class="mt-4 leading-relaxed" data-i18n="a.s1p2"></p>
+
+  <h2 class="font-header text-2xl text-white mt-10" data-i18n="a.s2h"></h2>
+  <p class="mt-4 leading-relaxed" data-i18n="a.s2p1"></p>
+  <div class="mt-5 bg-panel border hairline rounded-lg p-5">
+    <p class="text-xs text-neutral-500" data-i18n="a.boxh"></p>
+    <p class="num text-primary mt-2">p = your hashrate / network hashrate</p>
+    <p class="mt-2 text-sm text-neutral-400" data-i18n="a.boxp"></p>
+  </div>
+  <p class="mt-5 leading-relaxed" data-i18n="a.s2p2"></p>
+
+  <h2 class="font-header text-2xl text-white mt-10" data-i18n="a.s3h"></h2>
+  <p class="mt-4 leading-relaxed" data-i18n="a.s3p1"></p>
+  <p class="mt-4 leading-relaxed" data-i18n="a.s3p2"></p>
+
+  <!-- 文内工具嵌入 -->
+  <div class="mt-8 bg-panel border border-primary/30 rounded-lg p-6">
+    <h3 class="font-header text-lg text-white" data-i18n="a.toolh"></h3>
+    <p class="mt-2 text-sm text-neutral-400" data-i18n="a.toolp"></p>
+    <a href="calculator.html" class="btn-press inline-block mt-4 bg-primary text-black font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 text-sm" data-i18n="a.toolbtn"></a>
+  </div>
+
+  <div class="mt-10 border-t hairline pt-6 flex flex-wrap items-baseline justify-between gap-3">
+    <p class="text-xs text-neutral-600" data-i18n="a.note"></p>
+    <a href="learn.html" class="text-sm text-primary hover:text-white" data-i18n="a.next"></a>
+  </div>
+</article>
+
+<aside class="lg:col-span-4 pt-12 pb-16">
+  <div class="lg:sticky lg:top-24 grid gap-4">
+    <div class="bg-panel border hairline rounded-lg p-5">
+      <h2 class="text-sm text-neutral-400" data-i18n="toc.h"></h2>
+      <ol class="mt-3 grid gap-2 text-sm">
+        <li><a href="#" class="text-neutral-300 hover:text-primary" data-i18n="a.s1h"></a></li>
+        <li><a href="#" class="text-neutral-300 hover:text-primary" data-i18n="a.s2h"></a></li>
+        <li><a href="#" class="text-neutral-300 hover:text-primary" data-i18n="a.s3h"></a></li>
+      </ol>
+    </div>
+    <div class="bg-panel border hairline rounded-lg p-5">
+      <h2 class="text-sm text-neutral-400" data-i18n="rel.h"></h2>
+      <ul class="mt-3 grid gap-2.5 text-sm">
+        <li><a href="article.html" class="text-white hover:text-primary" data-i18n="rel.1"></a></li>
+        <li><a href="article.html" class="text-white hover:text-primary" data-i18n="rel.2"></a></li>
+        <li><a href="article.html" class="text-white hover:text-primary" data-i18n="rel.3"></a></li>
+      </ul>
+    </div>
+  </div>
+</aside>
+
+</main>
+
+<footer class="border-t hairline bg-panel">
+  <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
+    <div>
+      <p class="font-header text-lg text-white">HAMMER<span class="text-primary">FANS</span></p>
+      <p class="mt-3 text-neutral-500 leading-relaxed" data-i18n="footer.tag"></p>
+    </div>
+    <div>
+      <p class="text-neutral-400 mb-3" data-i18n="footer.site"></p>
+      <div class="grid grid-cols-2 gap-2 text-neutral-500">
+        <a href="calculator.html" class="hover:text-primary" data-i18n="nav.calc"></a>
+        <a href="miners.html" class="hover:text-primary" data-i18n="nav.miners"></a>
+        <a href="blocks.html" class="hover:text-primary" data-i18n="nav.blocks"></a>
+        <a href="learn.html" class="hover:text-primary" data-i18n="nav.learn"></a>
+      </div>
+    </div>
+    <div>
+      <p class="text-neutral-400 mb-3" data-i18n="footer.legal"></p>
+      <p class="text-neutral-500 leading-relaxed text-xs" data-i18n="footer.disc"></p>
+    </div>
+  </div>
+  <div class="border-t hairline"><p class="max-w-7xl mx-auto px-4 py-4 text-xs text-neutral-600">2026 HammerFans</p></div>
+</footer>
+
+<script>
+window.HF_PAGE_DICT = {
+  zh: {
+    'a.crumb':'挖矿到底是什么','a.cat':'入门路径 · 第 1 篇','a.read':'约 6 分钟',
+    'a.h1':'挖矿到底是什么：哈希、彩票与十分钟一次的开奖',
+    'a.lead':'不需要任何技术背景。读完这一篇，你就理解了家庭挖矿的全部底层逻辑。',
+    'a.s1h':'一台"猜数字"的机器',
+    'a.s1p1':'比特币没有银行记账，靠全球的机器共同维护一本账。每隔约 10 分钟，网络把一批交易打包成一个"区块"。谁有资格记这个账？答案是让所有机器做同一道纯拼运气的题：把区块信息加上一个自选数字，塞进 SHA-256 哈希函数里搅拌，看输出是不是小于某个目标值。不是？换个数字再来。',
+    'a.s1p2':'你的矿机做的就是这件事。BC 01 的"1.5 TH/s"意思是每秒尝试 1.5 万亿次。全网所有矿机都在同时猜，谁先猜中，谁就获得记账权，以及现在价值二十多万美元的区块奖励。',
+    'a.s2h':'为什么说它是彩票',
+    'a.s2p1':'关键在于：每一次猜测都是独立的，和上一次无关，也不积累任何"进度"。这让挖矿在数学上完全等价于买彩票，你的算力就是你每秒买的彩票张数。',
+    'a.boxh':'你的每块中奖概率',
+    'a.boxp':'BC 04 的 6 TH/s 除以全网约 938 EH/s，每个区块约 1.56 亿分之一，每天（144 个区块）约 109 万分之一。',
+    'a.s2p2':'听起来很绝望？但请记住两件事：第一，开奖每 10 分钟一次，全年无休；第二，这件事真的发生过，而且不止一次。一台 500 GH/s 的 Bitaxe Ultra 在 2024 年 7 月中了整个区块，算力比 BC 01 还小。',
+    'a.s3h':'家庭挖矿玩的是什么',
+    'a.s3p1':'说实话：按期望值算，家用矿机不赚钱。电费大概率超过矿池收益，回本几乎不可能。这不是缺点，是这个品类的前提。你买的不是印钞机，是一台放在书桌上、安静省电、每十分钟参与一次开奖的彩票机。',
+    'a.s3p2':'所以家庭矿工玩的是三样东西：极小概率但真实存在的巨额奖励、亲手参与比特币网络的体验、以及每天早上看一眼"昨晚有没有人中奖"的乐趣。搞清楚这一点，再决定要不要入场。',
+    'a.toolh':'算算你自己的概率','a.toolp':'选择机型，10 秒得到你的每日开奖赔率。','a.toolbtn':'打开计算器',
+    'a.note':'本文数据基于 2026-07 网络快照，观点不构成投资建议。',
+    'a.next':'下一篇：家庭矿机 vs 工业矿机',
+    'toc.h':'本文目录','rel.h':'相关阅读',
+    'rel.1':'彩票矿机的真相：开奖机不是印钞机','rel.2':'真的有人中过奖吗？有，而且不止一次','rel.3':'Solo 还是矿池？两种玩法一次讲清',
+  },
+  en: {
+    'a.crumb':'What mining really is','a.cat':'Beginner path · Part 1','a.read':'About 6 min',
+    'a.h1':'What mining really is: hashes, lotteries, a draw every ten minutes',
+    'a.lead':'No technical background needed. One read and the whole logic of home mining clicks.',
+    'a.s1h':'A machine that guesses numbers',
+    'a.s1p1':'Bitcoin has no bank keeping the books. A global swarm of machines maintains one ledger together. Every 10 minutes or so, the network bundles transactions into a "block". Who gets to write it? Every machine plays the same pure-luck game: take the block data plus a number of your choice, run it through SHA-256, and check whether the output falls below a target. No? Try another number.',
+    'a.s1p2':'That is all your miner does. The "1.5 TH/s" of a BC 01 means 1.5 trillion guesses per second. Every miner on Earth is guessing at once. First to hit writes the block and takes a reward currently worth over two hundred thousand dollars.',
+    'a.s2h':'Why it is a lottery',
+    'a.s2p1':'The key fact: every guess is independent. It has no memory of the last guess and builds no progress. Mathematically, mining is exactly a lottery, and your hashrate is simply how many tickets you buy per second.',
+    'a.boxh':'Your per-block odds',
+    'a.boxp':'A BC 04 at 6 TH/s against a 938 EH/s network is about 1 in 156 million per block, or about 1 in 1.09 million per day (144 blocks).',
+    'a.s2p2':'Sounds hopeless? Remember two things. First, the draw runs every 10 minutes, all year. Second, it has really happened, more than once. A 500 GH/s Bitaxe Ultra, smaller than a BC 01, took a whole block in July 2024.',
+    'a.s3h':'What home miners are really playing for',
+    'a.s3p1':'Honestly: on expected value, home miners lose money. Power costs usually exceed pool earnings, and payback is nearly impossible. That is not a flaw, it is the premise of the category. You are not buying a money printer. You are buying a quiet desk machine that enters a draw every ten minutes.',
+    'a.s3p2':'So home miners play for three things: a tiny but real shot at a huge reward, the experience of taking part in the Bitcoin network with your own hands, and the daily fun of checking whether anyone won last night. Understand that first, then decide whether to play.',
+    'a.toolh':'Check your own odds','a.toolp':'Pick a model and get your daily odds in 10 seconds.','a.toolbtn':'Open the calculator',
+    'a.note':'Data based on a 2026-07 network snapshot. Not financial advice.',
+    'a.next':'Next: Home miners vs industrial rigs',
+    'toc.h':'Contents','rel.h':'Related',
+    'rel.1':'The truth about lottery miners','rel.2':'Has anyone actually won? Yes, more than once','rel.3':'Solo or pool? Both games explained once',
+  }
+};
+</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

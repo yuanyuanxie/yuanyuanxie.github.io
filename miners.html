@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Miner Comparison | HammerFans</title>
+<meta name="description" content="Every home miner on one table: hashrate, power, noise, hash per dollar and daily block odds, sorted by home-mining logic.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { darkMode:'class', theme:{ extend:{
+  colors:{ primary:'#02ffb5', dark:'#050505', panel:'#111111' },
+  fontFamily:{ mono:['JetBrains Mono','monospace'], header:['Oswald','sans-serif'], body:['Outfit','sans-serif'] },
+}}}
+</script>
+<style>
+  html { color-scheme: dark; }
+  body { background:#050505; }
+  .hairline { border-color: rgba(255,255,255,0.08); }
+  .num { font-family:'JetBrains Mono',monospace; font-variant-numeric: tabular-nums; }
+  .btn-press:active { transform: scale(0.98); }
+  a, button { transition: color .25s cubic-bezier(0.16,1,0.3,1), background-color .25s cubic-bezier(0.16,1,0.3,1), border-color .25s cubic-bezier(0.16,1,0.3,1), opacity .25s cubic-bezier(0.16,1,0.3,1); }
+  input, select { color-scheme: dark; }
+  input:focus-visible, button:focus-visible, a:focus-visible { outline:2px solid #02ffb5; outline-offset:2px; }
+  th[data-sort] { cursor:pointer; user-select:none; }
+  th[data-sort]:hover { color:#02ffb5; }
+</style>
+</head>
+<body class="bg-dark text-neutral-300 font-body antialiased">
+
+<header class="sticky top-0 z-40 bg-dark/90 backdrop-blur border-b hairline">
+  <nav class="max-w-7xl mx-auto px-4 h-20 flex items-center gap-8" aria-label="Main">
+    <a href="index.html" class="flex items-center gap-2.5 shrink-0">
+      <img src="assets/img/hammer-logo.png" alt="HammerFans" class="w-9 h-9 object-contain" width="36" height="36">
+      <span class="font-header text-2xl tracking-wide text-white">HAMMER<span class="text-primary">FANS</span></span>
+    </a>
+    <div class="hidden lg:flex items-center gap-7 text-base">
+      <a href="index.html" class="hover:text-white" data-i18n="nav.home"></a>
+      <a href="calculator.html" class="hover:text-white" data-i18n="nav.calc"></a>
+      <a href="miners.html" class="text-white border-b-2 border-primary pb-0.5" aria-current="page" data-i18n="nav.miners"></a>
+      <a href="blocks.html" class="hover:text-white" data-i18n="nav.blocks"></a>
+      <a href="learn.html" class="hover:text-white" data-i18n="nav.learn"></a>
+      <a href="about.html" class="hover:text-white" data-i18n="nav.about"></a>
+    </div>
+    <div class="ml-auto flex items-center gap-4">
+      <button type="button" class="langBtn text-base text-neutral-400 hover:text-white" aria-label="Switch language">EN</button>
+      <button type="button" id="menuBtn" class="lg:hidden p-2 text-neutral-300 hover:text-white" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current"></span>
+      </button>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="hidden lg:hidden border-t hairline bg-panel px-4 py-3">
+    <div class="grid gap-1 text-base">
+      <a href="index.html" class="py-2 hover:text-white" data-i18n="nav.home"></a>
+      <a href="calculator.html" class="py-2 hover:text-white" data-i18n="nav.calc"></a>
+      <a href="miners.html" class="py-2 text-white" data-i18n="nav.miners"></a>
+      <a href="blocks.html" class="py-2 hover:text-white" data-i18n="nav.blocks"></a>
+      <a href="learn.html" class="py-2 hover:text-white" data-i18n="nav.learn"></a>
+      <a href="about.html" class="py-2 hover:text-white" data-i18n="nav.about"></a>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4">
+
+<div class="pt-12 pb-6">
+  <h1 class="font-header text-3xl md:text-4xl text-white" data-i18n="h1"></h1>
+</div>
+
+<!-- 控制条：自由筛选 + 电价 -->
+<div class="flex flex-wrap items-center gap-x-5 gap-y-3 pb-6">
+  <div class="flex items-center gap-2">
+    <label for="fBrand" class="text-sm text-neutral-400" data-i18n="f.brand"></label>
+    <select id="fBrand" class="bg-panel border hairline rounded-lg px-3 py-2 text-sm text-white"></select>
+  </div>
+  <div class="flex items-center gap-2">
+    <label for="fAlgo" class="text-sm text-neutral-400" data-i18n="f.algo"></label>
+    <select id="fAlgo" class="bg-panel border hairline rounded-lg px-3 py-2 text-sm text-white"></select>
+  </div>
+  <input id="fSearch" type="search" spellcheck="false" autocomplete="off"
+    class="w-56 bg-panel border hairline rounded-lg px-4 py-2 text-sm text-white placeholder:text-neutral-600" data-i18n-ph="f.search">
+  <span class="hidden md:block w-px h-6 bg-white/10" aria-hidden="true"></span>
+  <div class="flex items-center gap-2">
+    <label for="kwh" class="text-sm text-neutral-400" data-i18n="p.kwh"></label>
+    <span class="text-neutral-500 text-sm">$</span>
+    <input id="kwh" type="number" min="0" step="0.01" value="0.10" inputmode="decimal"
+      class="w-24 bg-panel border hairline rounded-lg px-3 py-2 num text-white">
+    <span class="text-neutral-500 text-sm">/kWh</span>
+  </div>
+  <button type="button" id="fReset" class="text-sm text-neutral-500 hover:text-neutral-300 underline underline-offset-4" data-i18n="f.reset"></button>
+</div>
+
+<!-- 对比表 -->
+<div class="overflow-x-auto pb-2">
+  <table class="w-full text-sm min-w-[900px]">
+    <thead>
+      <tr class="text-left text-sm text-neutral-400 border-b hairline">
+        <th class="py-3 pr-4 font-normal" data-i18n="c.model"></th>
+        <th class="py-3 pr-4 font-normal" data-i18n="c.algo"></th>
+        <th class="py-3 pr-4 font-normal" data-sort="hash"><span data-i18n="c.hash"></span> <span class="sortInd">↕</span></th>
+        <th class="py-3 pr-4 font-normal" data-sort="watts"><span data-i18n="c.power"></span> <span class="sortInd">↕</span></th>
+        <th class="py-3 pr-4 font-normal" data-sort="noise"><span data-i18n="c.noise"></span> <span class="sortInd">↕</span></th>
+        <th class="py-3 pr-4 font-normal" data-sort="price"><span data-i18n="c.price"></span> <span class="sortInd">↕</span></th>
+        <th class="py-3 pr-4 font-normal" data-sort="rel"><span data-i18n="c.rel"></span> <span class="sortInd">↕</span></th>
+        <th class="py-3 font-normal" data-sort="cost"><span data-i18n="c.cost"></span> <span class="sortInd">↕</span></th>
+      </tr>
+    </thead>
+    <tbody id="rows" class="num"></tbody>
+  </table>
+</div>
+
+<!-- 分页栏 -->
+<div class="flex flex-wrap items-center gap-4 py-4">
+  <p class="text-sm text-neutral-400"><span data-i18n="pg.showing"></span> <span id="pgRange" class="num">-</span> <span data-i18n="pg.of"></span> <span id="pgTotal" class="num">-</span></p>
+  <div class="ml-auto flex items-center gap-3">
+    <select id="pgSize" class="bg-panel border hairline rounded-lg px-3 py-2 text-sm text-white">
+      <option value="25" selected>25</option>
+    </select>
+    <div id="pgNav" class="hidden items-center gap-1"></div>
+  </div>
+</div>
+<p class="text-xs text-neutral-600 pb-4" data-i18n="notice.est"></p>
+
+
+</main>
+
+<footer class="border-t hairline bg-panel">
+  <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
+    <div>
+      <p class="font-header text-lg text-white">HAMMER<span class="text-primary">FANS</span></p>
+      <p class="mt-3 text-neutral-500 leading-relaxed" data-i18n="footer.tag"></p>
+    </div>
+    <div>
+      <p class="text-neutral-400 mb-3" data-i18n="footer.site"></p>
+      <div class="grid grid-cols-2 gap-2 text-neutral-500">
+        <a href="calculator.html" class="hover:text-primary" data-i18n="nav.calc"></a>
+        <a href="miners.html" class="hover:text-primary" data-i18n="nav.miners"></a>
+        <a href="blocks.html" class="hover:text-primary" data-i18n="nav.blocks"></a>
+        <a href="learn.html" class="hover:text-primary" data-i18n="nav.learn"></a>
+      </div>
+    </div>
+    <div>
+      <p class="text-neutral-400 mb-3" data-i18n="footer.legal"></p>
+      <p class="text-neutral-500 leading-relaxed text-xs" data-i18n="footer.disc"></p>
+    </div>
+  </div>
+  <div class="border-t hairline"><p class="max-w-7xl mx-auto px-4 py-4 text-xs text-neutral-600">2026 HammerFans</p></div>
+</footer>
+
+<script>
+window.HF_PAGE_DICT = {
+  zh: {
+    'h1':'家用矿机对比表',
+    'f.brand':'品牌','f.algo':'算法','f.search':'搜索机型…','f.all':'全部','f.reset':'重置',
+    'f.none':'没有符合条件的机型。','pg.showing':'显示','pg.of':'条，共','pg.page':'条 / 页','p.kwh':'电价',
+    'c.model':'机型','c.algo':'算法','c.hash':'算力','c.power':'功耗','c.noise':'噪音','c.price':'参考价',
+    'c.rel':'发布日期','c.cost':'月电费',
+    'silent':'近无声',
+  },
+  en: {
+    'h1':'Home Miner Comparison',
+    'f.brand':'Brand','f.algo':'Algorithm','f.search':'Search models...','f.all':'All','f.reset':'Reset',
+    'f.none':'No miners match these filters.','pg.showing':'Showing','pg.of':'of','pg.page':'/ page','p.kwh':'Electricity',
+    'c.model':'Model','c.algo':'Algorithm','c.hash':'Hashrate','c.power':'Power','c.noise':'Noise','c.price':'Price',
+    'c.rel':'Released','c.cost':'Monthly power',
+    'silent':'near silent',
+  }
+};
+</script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+const S = { brand:'all', algo:'all', q:'', kwh:0.10, sort:'rel', dir:-1, page:1, pageSize:25 };
+function ghs(m){ return m.algo==='sha256' ? m.ths*1000 : m.mhs/1000; }
+const BRANDS = [...new Set(HF_MINERS.map(m=>m.brand))];
+
+function buildFilters(){
+  const opt = (v,txt,sel)=>'<option value="'+v+'"'+(sel?' selected':'')+'>'+txt+'</option>';
+  document.getElementById('fBrand').innerHTML = opt('all',t('f.all'),S.brand==='all') + BRANDS.map(b=>opt(b,b,S.brand===b)).join('');
+  document.getElementById('fAlgo').innerHTML = opt('all',t('f.all'),S.algo==='all') + opt('sha256','SHA-256 (BTC)',S.algo==='sha256') + opt('scrypt','Scrypt (DOGE/LTC)',S.algo==='scrypt');
+}
+function rows(){
+  let list = HF_MINERS.slice();
+  if (S.brand!=='all') list = list.filter(m=>m.brand===S.brand);
+  if (S.algo!=='all')  list = list.filter(m=>m.algo===S.algo);
+  if (S.q) {
+    const norm = s => s.toLowerCase().replace(/[\s-]+/g,'');
+    const q = norm(S.q);
+    list = list.filter(m => norm(m.brand+m.model).includes(q));
+  }
+  const val = m => ({
+    hash: ghs(m), watts: m.watts, noise: m.noise, price: m.price,
+    rel: parseInt(m.rel.replace(/-/g,'')), cost: minerMonthlyCost(m,S.kwh),
+  })[S.sort];
+  list.sort((a,b)=> (val(a)-val(b)) * S.dir );
+  return list;
+}
+function renderPager(total, pages, start, shown){
+  document.getElementById('pgRange').textContent = total ? (start+1)+'-'+(start+shown) : '0';
+  document.getElementById('pgTotal').textContent = total;
+  const sel = document.getElementById('pgSize');
+  sel.innerHTML = [25,50,100].map(n=>'<option value="'+n+'"'+(S.pageSize===n?' selected':'')+'>'+n+' '+t('pg.page')+'</option>').join('');
+  const nav = document.getElementById('pgNav');
+  if (pages <= 1){ nav.classList.add('hidden'); nav.classList.remove('flex'); nav.innerHTML=''; return; }
+  nav.classList.remove('hidden'); nav.classList.add('flex');
+  let h = '<button type="button" data-pg="prev" class="btn-press w-9 h-9 border border-neutral-600 rounded-lg text-white hover:border-primary disabled:opacity-40" '+(S.page===1?'disabled':'')+'>&lt;</button>';
+  for (let i=1; i<=pages; i++){
+    h += '<button type="button" data-pg="'+i+'" class="btn-press num w-9 h-9 rounded-lg border '+(i===S.page?'border-primary text-primary bg-primary/10':'border-neutral-600 text-white hover:border-primary')+'">'+i+'</button>';
+  }
+  h += '<button type="button" data-pg="next" class="btn-press w-9 h-9 border border-neutral-600 rounded-lg text-white hover:border-primary disabled:opacity-40" '+(S.page===pages?'disabled':'')+'>&gt;</button>';
+  nav.innerHTML = h;
+  nav.querySelectorAll('button[data-pg]').forEach(b=>b.addEventListener('click', ()=>{
+    const v = b.dataset.pg;
+    if (v==='prev') S.page = Math.max(1, S.page-1);
+    else if (v==='next') S.page = Math.min(pages, S.page+1);
+    else S.page = parseInt(v);
+    render();
+  }));
+}
+function render(){
+  buildFilters();
+  const all = rows();
+  const pages = Math.max(1, Math.ceil(all.length / S.pageSize));
+  if (S.page > pages) S.page = pages;
+  const start = (S.page-1) * S.pageSize;
+  const list = all.slice(start, start + S.pageSize);
+  renderPager(all.length, pages, start, list.length);
+  document.getElementById('rows').innerHTML = list.length ? list.map(m=>{
+    const noise = m.noise===0 ? t('silent') : m.noiseTxt;
+    const name = (m.hammer?'<span class="text-primary font-semibold">':'<span class="text-white">')+m.brand+' '+m.model+'</span>';
+    return '<tr class="border-b hairline cursor-pointer hover:bg-white/5'+(m.hammer?' bg-primary/5':'')+'" onclick="location.href=\'miner.html?id='+m.id+'\'">'+
+      '<td class="py-3 pr-4 font-body">'+name+'</td>'+
+      '<td class="py-3 pr-4 text-neutral-400 font-body">'+(m.algo==='sha256'?'SHA-256':'Scrypt')+'</td>'+
+      '<td class="py-3 pr-4 text-white">'+m.hDisp+'</td>'+
+      '<td class="py-3 pr-4">'+m.watts+'W</td>'+
+      '<td class="py-3 pr-4">'+noise+'</td>'+
+      '<td class="py-3 pr-4">$'+m.price+'</td>'+
+      '<td class="py-3 pr-4">'+m.rel+'</td>'+
+      '<td class="py-3">$'+minerMonthlyCost(m,S.kwh).toFixed(1)+'</td></tr>';
+  }).join('') : '<tr><td colspan="8" class="py-10 text-center text-neutral-500 font-body">'+t('f.none')+'</td></tr>';
+}
+document.querySelectorAll('th[data-sort]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const k = th.dataset.sort;
+    if (S.sort===k) S.dir*=-1; else { S.sort=k; S.dir = (k==='rel')?-1:1; }
+    S.page=1; render();
+  });
+});
+document.getElementById('fBrand').addEventListener('change', e=>{ S.brand=e.target.value; S.page=1; render(); });
+document.getElementById('fAlgo').addEventListener('change', e=>{ S.algo=e.target.value; S.page=1; render(); });
+document.getElementById('fSearch').addEventListener('input', e=>{ S.q = e.target.value.trim(); S.page=1; render(); });
+document.getElementById('kwh').addEventListener('input', e=>{
+  const v = parseFloat(e.target.value); S.kwh = (isNaN(v)||v<0)?0.10:v; render();
+});
+document.getElementById('pgSize').addEventListener('change', e=>{ S.pageSize = parseInt(e.target.value)||25; S.page=1; render(); });
+document.getElementById('fReset').addEventListener('click', ()=>{
+  S.brand='all'; S.algo='all'; S.q=''; S.kwh=0.10; S.sort='rel'; S.dir=-1; S.page=1; S.pageSize=25;
+  document.getElementById('kwh').value='0.10';
+  document.getElementById('fSearch').value='';
+  render();
+});
+window.onLangChange = render;
+</script>
+</body>
+</html>
