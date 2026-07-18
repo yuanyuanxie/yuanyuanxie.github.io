@@ -1,391 +1,155 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solo Mining Odds Calculator | HammerFans</title>
-<meta name="description" content="Calculate your real odds of solo mining a BTC, DOGE or LTC block. Hammer model presets and custom hashrate.">
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-<script>
-tailwind.config = { darkMode:'class', theme:{ extend:{
-  colors:{ primary:'#02ffb5', dark:'#050505', panel:'#111111' },
-  fontFamily:{ mono:['JetBrains Mono','monospace'], header:['Oswald','sans-serif'], body:['Outfit','sans-serif'] },
-}}}
+<title>Bitcoin Solo Mining Calculator | HomeMining</title>
+<meta name="description" content="Every hash is a lottery ticket. Calculate your real odds of solo mining a Bitcoin block: probability per block and per day, expected wait, and cumulative odds over time, from live network data.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication",
+ "name":"Bitcoin Solo Mining Calculator | HomeMining",
+ "description":"Calculate your real odds of solo mining a Bitcoin block from live network data.",
+ "applicationCategory":"UtilityApplication","operatingSystem":"Web",
+ "offers":{"@type":"Offer","price":"0"}}
 </script>
-<style>
-  html { color-scheme: dark; }
-  body { background:#050505; }
-  .hairline { border-color: rgba(255,255,255,0.08); }
-  .num { font-family:'JetBrains Mono',monospace; font-variant-numeric: tabular-nums; }
-  .btn-press:active { transform: scale(0.98); }
-  a, button { transition: color .25s cubic-bezier(0.16,1,0.3,1), background-color .25s cubic-bezier(0.16,1,0.3,1), border-color .25s cubic-bezier(0.16,1,0.3,1), opacity .25s cubic-bezier(0.16,1,0.3,1); }
-  input, select { color-scheme: dark; }
-  input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline:2px solid #02ffb5; outline-offset:2px; }
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes pulseVal { 0% { color:#02ffb5; } }
-    .pulse { animation: pulseVal .5s ease; }
-  }
-</style>
+<link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body class="bg-dark text-neutral-300 font-body antialiased">
+<body data-page="calculator">
+<div id="nav-root"></div>
 
-<header class="sticky top-0 z-40 bg-dark/90 backdrop-blur border-b hairline">
-  <nav class="max-w-7xl mx-auto px-4 h-20 flex items-center gap-8" aria-label="Main">
-    <a href="index.html" class="flex items-center gap-2.5 shrink-0">
-      <img src="assets/img/hammer-logo.png" alt="HammerFans" class="w-9 h-9 object-contain" width="36" height="36">
-      <span class="font-header text-2xl tracking-wide text-white">HAMMER<span class="text-primary">FANS</span></span>
-    </a>
-    <div class="hidden lg:flex items-center gap-7 text-base">
-      <a href="index.html" class="hover:text-white" data-i18n="nav.home"></a>
-      <a href="calculator.html" class="text-white border-b-2 border-primary pb-0.5" aria-current="page" data-i18n="nav.calc"></a>
-      <a href="miners.html" class="hover:text-white" data-i18n="nav.miners"></a>
-      <a href="blocks.html" class="hover:text-white" data-i18n="nav.blocks"></a>
-      <a href="learn.html" class="hover:text-white" data-i18n="nav.learn"></a>
-      <a href="about.html" class="hover:text-white" data-i18n="nav.about"></a>
-    </div>
-    <div class="ml-auto flex items-center gap-4">
-      <button type="button" class="langBtn text-base text-neutral-400 hover:text-white" aria-label="Switch language">EN</button>
-      <button type="button" id="menuBtn" class="lg:hidden p-2 text-neutral-300 hover:text-white" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
-        <span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current"></span>
-      </button>
-    </div>
-  </nav>
-  <div id="mobileMenu" class="hidden lg:hidden border-t hairline bg-panel px-4 py-3">
-    <div class="grid gap-1 text-base">
-      <a href="index.html" class="py-2 hover:text-white" data-i18n="nav.home"></a>
-      <a href="calculator.html" class="py-2 text-white" data-i18n="nav.calc"></a>
-      <a href="miners.html" class="py-2 hover:text-white" data-i18n="nav.miners"></a>
-      <a href="blocks.html" class="py-2 hover:text-white" data-i18n="nav.blocks"></a>
-      <a href="learn.html" class="py-2 hover:text-white" data-i18n="nav.learn"></a>
-      <a href="about.html" class="py-2 hover:text-white" data-i18n="nav.about"></a>
-    </div>
-  </div>
-</header>
-
-<main class="max-w-7xl mx-auto px-4">
-
-<div class="pt-12 pb-8">
-  <h1 class="font-header text-3xl md:text-4xl text-white" data-i18n="h1"></h1>
-  <p class="mt-3 text-neutral-400 max-w-[56ch]" data-i18n="sub"></p>
-</div>
-
-<div class="border-b hairline flex gap-1" role="tablist" aria-label="Mode">
-  <button type="button" role="tab" aria-selected="true" class="mode-tab px-5 py-3 text-sm font-semibold text-primary border-b-2 border-primary -mb-px" data-mode="btc" data-i18n="tab.btc"></button>
-  <button type="button" role="tab" aria-selected="false" class="mode-tab px-5 py-3 text-sm text-neutral-400 border-b-2 border-transparent -mb-px hover:text-white" data-mode="scrypt" data-i18n="tab.scrypt"></button>
-  <button type="button" role="tab" aria-selected="false" class="mode-tab px-5 py-3 text-sm text-neutral-400 border-b-2 border-transparent -mb-px hover:text-white" data-mode="pool" data-i18n="tab.pool"></button>
-</div>
-
-<section id="panel-calc" class="py-8 grid lg:grid-cols-12 gap-8" role="tabpanel">
-  <div class="lg:col-span-5">
-    <h2 class="text-sm text-neutral-400 mb-3" id="minerGroupLabel" data-i18n="pick"></h2>
-    <div class="flex flex-wrap gap-2" role="group" aria-labelledby="minerGroupLabel" id="minerGrid"></div>
-    <div class="mt-6">
-      <label for="customH" class="block text-sm text-neutral-400 mb-2" data-i18n="custom"></label>
-      <div class="flex gap-2">
-        <input id="customH" type="number" min="0" step="any" inputmode="decimal" placeholder="0"
-          class="w-full bg-panel border hairline rounded-lg px-4 py-3 num text-white placeholder:text-neutral-600">
-        <select id="customUnit" aria-label="Unit" class="bg-panel border hairline rounded-lg px-3 py-3 text-sm text-white">
-          <option value="1e-3">GH/s</option><option value="1" selected>TH/s</option><option value="1e3">PH/s</option>
-        </select>
-      </div>
-      <p class="mt-2 text-xs text-neutral-600" data-i18n="customNote"></p>
-    </div>
-    <div class="mt-6">
-      <label for="qty" class="block text-sm text-neutral-400 mb-2" data-i18n="qty"></label>
-      <div class="flex items-center gap-3">
-        <button type="button" id="qtyMinus" class="btn-press w-10 h-10 border border-neutral-600 rounded-lg text-white hover:border-primary" aria-label="minus">-</button>
-        <span id="qty" class="num text-xl text-white w-10 text-center" aria-live="polite">1</span>
-        <button type="button" id="qtyPlus" class="btn-press w-10 h-10 border border-neutral-600 rounded-lg text-white hover:border-primary" aria-label="plus">+</button>
-      </div>
-    </div>
-    <div id="mergedNote" class="hidden mt-6 flex items-center gap-4">
-      <span class="text-sm text-neutral-400" data-i18n="coinPick"></span>
-      <div class="flex gap-2">
-        <button type="button" id="coinDoge" class="btn-press text-xs border border-primary text-primary rounded-full px-4 py-1.5" aria-pressed="true" data-i18n="coin.doge"></button>
-        <button type="button" id="coinLtc" class="btn-press text-xs border border-neutral-600 text-neutral-300 rounded-full px-4 py-1.5 hover:border-primary hover:text-primary" aria-pressed="false" data-i18n="coin.ltc"></button>
-      </div>
-    </div>
-    <button type="button" id="calcBtn" class="btn-press mt-8 w-full bg-primary text-black font-header text-lg tracking-wide px-6 py-3.5 rounded-lg hover:opacity-90" data-i18n="calc.btn"></button>
-  </div>
-
-  <div class="lg:col-span-7 flex">
-    <div class="bg-panel border hairline rounded-lg p-6 w-full flex flex-col justify-between">
-      <div class="flex items-baseline justify-between gap-2">
-        <h2 class="text-sm text-neutral-400"><span data-i18n="res.h"></span> <span id="resCoin" class="text-primary">(BTC)</span></h2>
-        <p class="num text-sm text-neutral-400"><span data-i18n="res.total"></span> <span id="resHash" class="text-neutral-400">-</span></p>
-      </div>
-      <div class="mt-5 grid grid-cols-2 gap-4">
-        <div class="border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="res.block"></p><p id="oddsBlock" class="num text-xl md:text-2xl text-white font-bold mt-1 whitespace-nowrap">-</p></div>
-        <div class="border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="res.day"></p><p id="oddsDay" class="num text-xl md:text-2xl text-white font-bold mt-1 whitespace-nowrap">-</p></div>
-        <div class="border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="res.month"></p><p id="oddsMonth" class="num text-xl md:text-2xl text-white font-bold mt-1 whitespace-nowrap">-</p></div>
-        <div class="border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="res.year"></p><p id="oddsYear" class="num text-xl md:text-2xl text-white font-bold mt-1 whitespace-nowrap">-</p></div>
-      </div>
-      <div class="mt-5 grid md:grid-cols-2 gap-4 border-t hairline pt-5">
-        <div><p class="text-sm text-neutral-400" data-i18n="res.exp"></p><p id="expTime" class="num text-xl text-white font-bold mt-1">-</p></div>
-        <div><p class="text-sm text-neutral-400" data-i18n="res.reward"></p><p id="reward" class="num text-xl text-white font-bold mt-1">-</p></div>
-      </div>
+<main>
+  <!-- 页头（01 文档定稿文案） -->
+  <div class="hero"><!-- F 方案：柔雾色块（无绸缎、无点阵） -->
+    <div class="f-mist f-mist1"></div>
+    <div class="f-mist f-mist2"></div>
+    <div class="hero-inner">
+      <h1 class="rise">Bitcoin Solo Mining Calculator</h1>
+      <p class="tagline rise d1">Every hash is a lottery ticket. Calculate your odds of winning the next block.</p>
     </div>
   </div>
 
-  <div class="lg:col-span-12">
-    <div class="bg-panel border hairline rounded-lg px-6 py-8 text-center">
-      <p class="text-sm text-neutral-400" data-i18n="cmp.h"></p>
-      <p id="cmpText" class="mt-3 text-lg md:text-xl text-neutral-200 leading-relaxed">-</p>
-    </div>
-  </div>
-</section>
+  <div class="page">
 
-<section id="panel-pool" class="py-8 hidden" role="tabpanel">
-  <div class="grid lg:grid-cols-12 gap-8">
-    <div class="lg:col-span-5">
-      <label for="poolAddr" class="block text-sm text-neutral-400 mb-2" data-i18n="pool.addr"></label>
-      <input id="poolAddr" type="text" placeholder="bc1q..." spellcheck="false"
-        class="w-full bg-panel border hairline rounded-lg px-4 py-3 num text-white placeholder:text-neutral-600">
-      <div class="mt-4 flex items-center gap-4">
-        <span class="text-sm text-neutral-400" data-i18n="pool.srv"></span>
-        <div class="flex gap-2 text-xs" role="group" aria-label="Pool server">
-          <button type="button" class="pool-srv border border-primary text-primary rounded-full px-3 py-1" aria-pressed="true">CKPool US</button>
-          <button type="button" class="pool-srv border border-neutral-600 rounded-full px-3 py-1 hover:border-primary hover:text-primary" aria-pressed="false">CKPool EU</button>
-          <button type="button" class="pool-srv border border-neutral-600 rounded-full px-3 py-1 hover:border-primary hover:text-primary" aria-pressed="false">Public Pool</button>
+    <!-- 数据条：4 张卡片（Price → Hashrate → Reward → Difficulty） -->
+    <div class="strip rise d2">
+      <div class="strip-card" id="strip-price"></div>
+      <div class="strip-card" id="strip-net"></div>
+      <div class="strip-card" id="strip-reward"></div>
+      <div class="strip-card" id="strip-diff"></div>
+    </div>
+
+    <!-- 输入卡（02 文档：仅 2 项输入）；rise d3 = 加载时序第 4 位 -->
+    <div class="card rise d3">
+      <div class="input-grid">
+        <div>
+          <label class="field-label" for="inp-hashrate">Your Hashrate</label>
+          <div class="input-row">
+            <input type="number" id="inp-hashrate" min="0" step="any" placeholder="e.g. 1.2">
+            <select id="inp-unit">
+              <option>TH/s</option><option>GH/s</option><option>MH/s</option><option>PH/s</option><option>EH/s</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="field-label" for="inp-duration">Mining Duration <em>· optional</em></label>
+          <div class="input-row">
+            <input type="number" id="inp-duration" min="0" step="any" placeholder="e.g. 6">
+            <select id="inp-dur-unit">
+              <option>Months</option><option>Days</option><option>Weeks</option><option>Years</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" id="btn-calc">Calculate →</button>
+      </div>
+    </div>
+
+    <!-- 结果区（计算前完全隐藏，不留空壳） -->
+    <div id="results" class="hidden">
+
+      <!-- ① 概率组：旋转流光描边（全站唯一授权）+ 环境光 + CountUp -->
+      <div class="reveal" style="position:relative;">
+        <div class="glow-spot" style="top:-40px;left:50%;transform:translateX(-50%);width:560px;height:300px;"></div>
+        <div class="card result-hero" id="res-card"><!-- 旋转描边随色场面板改版停用（03 文档待同步） -->
+          <div class="result-label">Chance per Block</div>
+          <div class="result-big mono"><small id="res-prefix">1 in</small><span id="res-big-num">—</span></div>
+          <div class="sub-tiles">
+            <div class="sub-tile"><div class="k">Per Day</div><div class="v mono" id="res-day">—</div></div>
+            <div class="sub-tile"><div class="k">Expected Wait</div><div class="v mono" id="res-wait">—</div></div>
+            <div class="sub-tile"><div class="k">Your Share</div><div class="v mono" id="res-share">—</div></div>
+          </div>
         </div>
       </div>
-      <button type="button" id="poolQuery" class="btn-press mt-8 w-full bg-primary text-black font-header text-lg tracking-wide px-6 py-3.5 rounded-lg hover:opacity-90" data-i18n="pool.btn"></button>
-    </div>
-    <div class="lg:col-span-7 flex">
-      <div class="bg-panel border hairline rounded-lg p-6 w-full flex flex-col">
-        <h2 class="text-sm text-neutral-400" data-i18n="pool.r1"></h2>
-        <div id="poolResult" class="flex-1 flex flex-col justify-center">
-          <p class="num text-3xl font-bold"><span id="poolHash" class="text-primary">-</span> <span id="poolWorkers" class="text-sm text-neutral-500 font-normal"></span></p>
-          <p class="mt-4 text-sm text-neutral-400"><span data-i18n="pool.r3"></span> <span id="poolOdds" class="num text-xl text-white font-bold">-</span></p>
+
+      <!-- 现实类比卡（紧跟大字卡，用户拍板：卡片保留、不带概率数字） -->
+      <div class="card persp hoverable reveal">
+        <div class="persp-lead" id="persp-lead">Per block, your odds sit closest to</div>
+        <p class="persp-text" id="persp-text">—</p>
+      </div>
+
+      <!-- ② 钱组 -->
+      <div class="card win-card hoverable reveal">
+        <span class="win-label">If you win:</span>
+        <span class="win-val mono" id="res-win">—</span>
+      </div>
+
+      <!-- ③ 运气组（填了时长才出现） -->
+      <div class="card luck-card reveal hidden" id="luck-group">
+        <div class="luck-head">
+          <span class="luck-title">Your Luck So Far</span>
+          <span class="badge" id="luck-badge">—</span>
         </div>
+        <div class="luck-stats">
+          <div class="luck-stat"><div class="k">Odds so far</div><div class="v mono" id="luck-sofar">—</div></div>
+          <div class="luck-stat"><div class="k">Journey completed</div><div class="v mono" id="luck-journey">—</div></div>
+        </div>
+        <p class="luck-verdict" id="luck-verdict">—</p>
+      </div>
+
+      <!-- ④ 时间纵深：左数字行 + 右图表面板（2026-07-16 用户拍板改版） -->
+      <div class="card reveal">
+        <div class="keep-head">
+          <span class="keep-ico">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 6-8"/><path d="M17 6h4v4"/></svg>
+          </span>
+          <div>
+            <div class="sec-eyebrow">If you keep mining</div>
+            <div class="sec-title">Your odds grow with every block</div>
+            <div class="sec-sub">Cumulative chance of finding at least one block · <span id="sec-sub-hashrate">—</span></div>
+          </div>
+        </div>
+        <div class="keep-grid">
+          <div class="keep-rows" id="fun-rows"></div>
+          <div class="keep-chart">
+            <span class="chart-badge">Cumulative chance</span>
+            <svg id="curve" width="100%" viewBox="0 0 520 520"></svg>
+          </div>
+        </div>
+        <p class="keep-note"><span class="keep-note-ico">ⓘ</span> Odds are based on a constant hashrate of <span id="note-hashrate">—</span> and network conditions at the time of calculation.</p>
+      </div>
+
+    </div><!-- /results -->
+
+    <!-- Last Solo Block（02 文档：V1 静态占位，真实数据随 Blocks 页统一设计）；rise d4 = 加载时序第 5 位 -->
+    <div class="card lastblock hoverable rise d4">
+      <div class="lb-left">
+        <div class="k">Last Solo Block</div>
+        <div class="lb-height mono">#955,703</div>
+        <div class="lb-meta">June 2026 · Solo CKPool</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-stat"><div class="k">Reward</div><div class="v mono">₿3.1553</div></div>
+        <div class="lb-stat"><div class="k">Miner</div><div class="v mono">3Gk1…enH</div></div>
+        <a href="blocks.html" class="lb-link">All blocks →</a>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="py-8 border-t hairline">
-  <div class="flex items-baseline justify-between">
-    <h2 class="font-header text-xl text-white" data-i18n="net.h2"></h2>
   </div>
-  <div class="mt-5 grid grid-cols-2 gap-4">
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p1"></p><p class="num text-lg text-white font-bold mt-1">$62,939</p><p class="num text-xs text-red-400 mt-0.5">-1.3% 24h</p></div>
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p2"></p><p class="num text-lg text-white font-bold mt-1">938.5 EH/s</p><p class="text-xs text-neutral-600 mt-0.5" data-i18n="net.p2b"></p></div>
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p3"></p><p class="num text-lg text-white font-bold mt-1">#957,116</p></div>
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p4"></p><p class="num text-lg text-white font-bold mt-1">-3.45%</p></div>
-  </div>
-  <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p5"></p><p class="num text-lg text-white font-bold mt-1">$0.142</p></div>
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p6"></p><p class="num text-lg text-white font-bold mt-1">$84.6</p></div>
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p7"></p><p class="num text-lg text-white font-bold mt-1">2.4 PH/s</p></div>
-    <div class="bg-panel border hairline rounded-lg p-4"><p class="text-sm text-neutral-400" data-i18n="net.p8"></p><p class="num text-lg text-white font-bold mt-1">10,000 DOGE</p></div>
-  </div>
-</section>
-
-<section class="py-8 border-t hairline">
-  <div class="bg-panel border hairline rounded-lg p-6 md:flex items-center gap-8">
-    <div>
-      <p class="text-sm text-neutral-400" data-i18n="last.h"></p>
-      <p class="font-header text-lg text-white mt-1">#955,703 · CKPool Solo</p>
-      <p class="num text-sm text-neutral-400 mt-1">3.1553 BTC ≈ $198,589, 2026-06-27</p>
-    </div>
-    <a href="blocks.html" class="btn-press md:ml-auto mt-4 md:mt-0 inline-block border border-primary text-primary px-5 py-2.5 rounded-lg hover:bg-primary hover:text-black text-sm font-semibold shrink-0" data-i18n="last.btn"></a>
-  </div>
-</section>
-
 </main>
 
-<footer class="border-t hairline bg-panel mt-8">
-  <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
-    <div>
-      <p class="font-header text-lg text-white">HAMMER<span class="text-primary">FANS</span></p>
-      <p class="mt-3 text-neutral-500 leading-relaxed" data-i18n="footer.tag"></p>
-    </div>
-    <div>
-      <p class="text-neutral-400 mb-3" data-i18n="footer.site"></p>
-      <div class="grid grid-cols-2 gap-2 text-neutral-500">
-        <a href="calculator.html" class="hover:text-primary" data-i18n="nav.calc"></a>
-        <a href="miners.html" class="hover:text-primary" data-i18n="nav.miners"></a>
-        <a href="blocks.html" class="hover:text-primary" data-i18n="nav.blocks"></a>
-        <a href="learn.html" class="hover:text-primary" data-i18n="nav.learn"></a>
-      </div>
-    </div>
-    <div>
-      <p class="text-neutral-400 mb-3" data-i18n="footer.legal"></p>
-      <p class="text-neutral-500 leading-relaxed text-xs" data-i18n="footer.disc"></p>
-    </div>
-  </div>
-  <div class="border-t hairline"><p class="max-w-7xl mx-auto px-4 py-4 text-xs text-neutral-600">2026 HammerFans</p></div>
-</footer>
-
-<script>
-window.HF_PAGE_DICT = {
-  zh: {
-    'h1':'Solo 挖矿概率计算器','sub':'每一次哈希都是一张独立的彩票。选择机型或输入算力，看看你的真实赔率。',
-    'tab.btc':'BTC 概率','tab.scrypt':'DOGE / LTC 概率','tab.pool':'矿池地址查询',
-    'pick':'选择机型','calc.btn':'计 算','custom':'或自定义算力','customNote':'输入自定义算力后，机型选择自动失效。','qty':'台数','coinPick':'目标币种',
-    'res.h':'你的赔率','res.total':'算力合计','res.block':'每块','res.day':'每天','res.month':'每月','res.year':'每年',
-    'res.exp':'期望出块时间','res.reward':'单块奖励',
-    'coin.doge':'DOGE','coin.ltc':'LTC',
-    'cmp.h':'这个概率是什么概念',
-    'cmp.flip':'今天中一个块的概率 ≈ 连续抛出 <span class="text-primary font-semibold">{n} 次正面</span>硬币。',
-    'cmp.same':'今天中一个块的概率，大致相当于<span class="text-primary font-semibold">{event}</span>。',
-    'cmp.better':'今天中一个块的概率，比<span class="text-primary font-semibold">{event}</span>还高约 <span class="num text-primary font-semibold">{x} 倍</span>。',
-    'cmp.worse':'今天中一个块的概率，比<span class="text-primary font-semibold">{event}</span>低约 <span class="num text-primary font-semibold">{x} 倍</span>。',
-    'ev.1':'业余高尔夫球手打出一杆进洞','ev.2':'起手直接摸到皇家同花顺','ev.3':'今年被闪电击中','ev.4':'中英国乐透头奖','ev.5':'中美国强力球头奖',
-    'pool.addr':'BTC 地址','pool.srv':'矿池','pool.btn':'查 询','pool.r1':'查询结果','pool.r2':'5 台在线',
-    'pool.r3':'每天中块概率约',
-    'net.h2':'网络数据',
-    'net.p1':'BTC 价格','net.p2':'BTC 全网算力','net.p2b':'3 日均值','net.p3':'区块高度',
-    'net.p4':'下次难度调整','net.p5':'DOGE 价格','net.p6':'LTC 价格','net.p7':'LTC 全网算力','net.p8':'DOGE 区块奖励',
-    'last.h':'最近一次 Solo 出块','last.btn':'全部开奖记录',
-    'u.year':'年','u.day':'天',
-  },
-  en: {
-    'h1':'Solo Mining Odds Calculator','sub':'Every hash is an independent lottery ticket. Pick a model or enter a hashrate to see your real odds.',
-    'tab.btc':'BTC Odds','tab.scrypt':'DOGE / LTC Odds','tab.pool':'Pool Address Lookup',
-    'pick':'Pick a model','calc.btn':'Calculate','custom':'Or enter a custom hashrate','customNote':'Entering a custom hashrate overrides the model selection.','qty':'Units','coinPick':'Coin',
-    'res.h':'Your odds','res.total':'Total hashrate','res.block':'Per block','res.day':'Per day','res.month':'Per month','res.year':'Per year',
-    'res.exp':'Expected time to a block','res.reward':'Block reward',
-    'coin.doge':'DOGE','coin.ltc':'LTC',
-    'cmp.h':'What these odds feel like',
-    'cmp.flip':'Hitting a block today is like flipping <span class="text-primary font-semibold">{n} heads in a row</span>.',
-    'cmp.same':'Hitting a block today: roughly the same odds as <span class="text-primary font-semibold">{event}</span>.',
-    'cmp.better':'Hitting a block today is about <span class="num text-primary font-semibold">{x}×</span> more likely than <span class="text-primary font-semibold">{event}</span>.',
-    'cmp.worse':'Hitting a block today is about <span class="num text-primary font-semibold">{x}×</span> less likely than <span class="text-primary font-semibold">{event}</span>.',
-    'ev.1':'an amateur golfer hitting a hole-in-one','ev.2':'being dealt a royal flush','ev.3':'being struck by lightning this year','ev.4':'winning the UK Lotto jackpot','ev.5':'winning the US Powerball jackpot',
-    'pool.addr':'BTC address','pool.srv':'Pool','pool.btn':'Look up','pool.r1':'Lookup result','pool.r2':'5 workers online',
-    'pool.r3':'Daily block odds about',
-    'net.h2':'Network data',
-    'net.p1':'BTC price','net.p2':'BTC network hashrate','net.p2b':'3-day average','net.p3':'Block height',
-    'net.p4':'Next difficulty','net.p5':'DOGE price','net.p6':'LTC price','net.p7':'LTC network hashrate','net.p8':'DOGE block reward',
-    'last.h':'Last solo block found','last.btn':'All block wins',
-    'u.year':'years','u.day':'days',
-  }
-};
-</script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
-<script>
-const state = { mode:'btc', miner:'bc04', qty:1, custom:null, scryptCoin:'doge' };
-const $ = id => document.getElementById(id);
-const HM = {};
-HF_MINERS.forEach(m => HM[m.id] = m);
-const HAMMER_IDS = HF_MINERS.slice(0,6).map(m=>m.id);
-
-function renderMiners(){
-  const grid = $('minerGrid'); grid.innerHTML = '';
-  const algo = state.mode==='btc' ? 'sha256' : 'scrypt';
-  HAMMER_IDS.map(id=>HM[id]).filter(m=>m.algo===algo).forEach(m=>{
-    const on = state.miner===m.id && state.custom===null;
-    const b = document.createElement('button');
-    b.type='button';
-    b.className = 'btn-press border rounded-full px-4 py-2 text-sm ' + (on ? 'border-primary bg-primary/10 text-primary' : 'border-neutral-700 text-white hover:border-primary hover:text-primary');
-    b.setAttribute('aria-pressed', on);
-    b.innerHTML = '<span class="font-header">'+m.model+'</span> <span class="num text-xs '+(on?'text-primary/70':'text-neutral-500')+'">'+m.hDisp+'</span>';
-    b.addEventListener('click', ()=>{ state.miner=m.id; state.custom=null; $('customH').value=''; renderInputs(); });
-    grid.appendChild(b);
-  });
-}
-function totalTHs(){
-  if(state.custom!==null) return state.custom*state.qty;
-  const m = HM[state.miner];
-  return (m.algo==='sha256' ? m.ths : m.mhs/1e6) * state.qty;
-}
-function calc(){
-  const tot = totalTHs();
-  let perBlock, bpd, rewardTxt, coin;
-  if(state.mode==='btc'){
-    perBlock = HF_SNAPSHOT.btcNetTHs/tot; bpd = 144; coin='(BTC)';
-    rewardTxt = HF_SNAPSHOT.btcReward+' BTC ≈ $'+Math.round(HF_SNAPSHOT.btcReward*HF_SNAPSHOT.btcPrice).toLocaleString('en-US');
-  } else if(state.scryptCoin==='doge'){
-    perBlock = HF_SNAPSHOT.dogeNetMHs/(tot*1e6); bpd = 1440; coin='(DOGE)';
-    rewardTxt = HF_SNAPSHOT.dogeReward.toLocaleString('en-US')+' DOGE ≈ $'+Math.round(HF_SNAPSHOT.dogeReward*HF_SNAPSHOT.dogePrice).toLocaleString('en-US');
-  } else {
-    perBlock = HF_SNAPSHOT.ltcNetMHs/(tot*1e6); bpd = 576; coin='(LTC)';
-    rewardTxt = HF_SNAPSHOT.ltcReward+' LTC ≈ $'+Math.round(HF_SNAPSHOT.ltcReward*HF_SNAPSHOT.ltcPrice).toLocaleString('en-US');
-  }
-  const p = 1/perBlock, over = n => 1/(1-Math.pow(1-p,n));
-  return { perBlock, coin, rewardTxt, day:over(bpd), month:over(bpd*30), year:over(bpd*365), expDays:perBlock/bpd };
-}
-const CMP_LADDER = [
-  {o:12500,     k:'ev.1'},
-  {o:649740,    k:'ev.2'},
-  {o:1200000,   k:'ev.3'},
-  {o:45057474,  k:'ev.4'},
-  {o:292201338, k:'ev.5'},
-];
-function cmpSentence(odds){
-  if (odds < 16384) return t('cmp.flip').replace('{n}', Math.max(1, Math.round(Math.log2(odds))));
-  let best = CMP_LADDER[0], bd = Infinity;
-  CMP_LADDER.forEach(e=>{ const d = Math.abs(Math.log(odds/e.o)); if(d<bd){ bd=d; best=e; } });
-  const ratio = best.o / odds, ev = t(best.k);
-  if (ratio >= 1.5)  return t('cmp.better').replace('{x}', Math.round(ratio).toLocaleString('en-US')).replace('{event}', ev);
-  if (ratio <= 0.67) return t('cmp.worse').replace('{x}', Math.round(1/ratio).toLocaleString('en-US')).replace('{event}', ev);
-  return t('cmp.same').replace('{event}', ev);
-}
-function renderInputs(){
-  renderMiners();
-  const tot = totalTHs();
-  $('resHash').textContent = state.mode==='btc' ? tot.toFixed(tot<10?1:0)+' TH/s' : Math.round(tot*1e6).toLocaleString('en-US')+' MH/s';
-  $('mergedNote').classList.toggle('hidden', state.mode!=='scrypt');
-}
-function renderResults(){
-  const r = calc();
-  $('resCoin').textContent = r.coin;
-  const setV = (id,v)=>{ const el=$(id); if(el.textContent!==v){ el.textContent=v; el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse'); } };
-  setV('oddsBlock', fmtOdds(r.perBlock));
-  setV('oddsDay', fmtOdds(r.day));
-  setV('oddsMonth', fmtOdds(r.month));
-  setV('oddsYear', fmtOdds(r.year));
-  $('reward').textContent = r.rewardTxt;
-  const y = r.expDays/365;
-  $('expTime').textContent = y>=1 ? Math.round(y).toLocaleString('en-US')+' '+t('u.year') : Math.round(r.expDays)+' '+t('u.day');
-  const cmpEl = $('cmpText'), cmpHtml = cmpSentence(r.day);
-  if (cmpEl.innerHTML !== cmpHtml){ cmpEl.innerHTML = cmpHtml; cmpEl.classList.remove('pulse'); void cmpEl.offsetWidth; cmpEl.classList.add('pulse'); }
-}
-function render(){ renderInputs(); renderResults(); }
-document.querySelectorAll('.mode-tab').forEach(tab=>{
-  tab.addEventListener('click', ()=>{
-    document.querySelectorAll('.mode-tab').forEach(x=>{
-      const on = x===tab;
-      x.setAttribute('aria-selected', on);
-      x.classList.toggle('text-primary', on); x.classList.toggle('border-primary', on); x.classList.toggle('font-semibold', on);
-      x.classList.toggle('text-neutral-400', !on); x.classList.toggle('border-transparent', !on);
-    });
-    const mode = tab.dataset.mode;
-    if(mode==='pool'){ $('panel-calc').classList.add('hidden'); $('panel-pool').classList.remove('hidden'); return; }
-    $('panel-pool').classList.add('hidden'); $('panel-calc').classList.remove('hidden');
-    state.mode = mode; state.custom = null; $('customH').value='';
-    state.miner = mode==='btc' ? 'bc04' : 'dc06';
-    render();
-  });
-});
-$('customH').addEventListener('input', e=>{
-  const v = parseFloat(e.target.value);
-  state.custom = (isNaN(v)||v<=0) ? null : v*parseFloat($('customUnit').value);
-  renderInputs();
-});
-$('customUnit').addEventListener('change', ()=> $('customH').dispatchEvent(new Event('input')));
-$('qtyPlus').addEventListener('click', ()=>{ state.qty=Math.min(99,state.qty+1); $('qty').textContent=state.qty; renderInputs(); });
-$('qtyMinus').addEventListener('click', ()=>{ state.qty=Math.max(1,state.qty-1); $('qty').textContent=state.qty; renderInputs(); });
-$('coinDoge').addEventListener('click', ()=>{ state.scryptCoin='doge'; swapCoin(true); });
-$('coinLtc').addEventListener('click',  ()=>{ state.scryptCoin='ltc';  swapCoin(false); });
-function swapCoin(doge){
-  $('coinDoge').className = 'btn-press text-xs rounded-full px-4 py-1.5 border ' + (doge?'border-primary text-primary':'border-neutral-600 text-neutral-300 hover:border-primary hover:text-primary');
-  $('coinLtc').className  = 'btn-press text-xs rounded-full px-4 py-1.5 border ' + (!doge?'border-primary text-primary':'border-neutral-600 text-neutral-300 hover:border-primary hover:text-primary');
-  $('coinDoge').setAttribute('aria-pressed', doge); $('coinLtc').setAttribute('aria-pressed', !doge);
-}
-$('calcBtn').addEventListener('click', renderResults);
-$('poolQuery').addEventListener('click', ()=>{ $('poolHash').textContent='7.42 TH/s'; $('poolWorkers').textContent=t('pool.r2'); $('poolOdds').textContent='1 in 878,000'; });
-document.querySelectorAll('.pool-srv').forEach(b=>b.addEventListener('click', ()=>{
-  document.querySelectorAll('.pool-srv').forEach(x=>{ x.classList.remove('border-primary','text-primary'); x.classList.add('border-neutral-600'); x.setAttribute('aria-pressed','false'); });
-  b.classList.add('border-primary','text-primary'); b.classList.remove('border-neutral-600'); b.setAttribute('aria-pressed','true');
-}));
-window.onLangChange = render;
-render();
-</script>
+<div id="foot-root"></div>
+<script src="assets/js/format.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/calculator.js"></script>
 </body>
 </html>

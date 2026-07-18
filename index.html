@@ -1,305 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HammerFans | Odds, Comparisons & Block Wins for Home Miners</title>
-<meta name="description" content="Built for home miners: a solo odds calculator, home miner comparison table, block-win wall and beginner knowledge base.">
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-<script>
-tailwind.config = { darkMode:'class', theme:{ extend:{
-  colors:{ primary:'#02ffb5', dark:'#050505', panel:'#111111' },
-  fontFamily:{ mono:['JetBrains Mono','monospace'], header:['Oswald','sans-serif'], body:['Outfit','sans-serif'] },
-}}}
-</script>
-<style>
-  html { color-scheme: dark; }
-  body { background:#050505; }
-  .hairline { border-color: rgba(255,255,255,0.08); }
-  .num { font-family:'JetBrains Mono',monospace; font-variant-numeric: tabular-nums; }
-  .btn-press:active { transform: scale(0.98); }
-  a, button { transition: color .25s cubic-bezier(0.16,1,0.3,1), background-color .25s cubic-bezier(0.16,1,0.3,1), border-color .25s cubic-bezier(0.16,1,0.3,1), opacity .25s cubic-bezier(0.16,1,0.3,1); }
-  input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline:2px solid #02ffb5; outline-offset:2px; }
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal { opacity:0; transform:translateY(16px); transition:opacity .6s cubic-bezier(0.16,1,0.3,1), transform .6s cubic-bezier(0.16,1,0.3,1); }
-    .reveal.in { opacity:1; transform:none; }
-  }
-</style>
+<title>HomeMining | The Independent Home of Solo Bitcoin Mining</title>
+<meta name="description" content="Real odds, real machines, real wins. An independent site for home Bitcoin miners.">
+<link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body class="bg-dark text-neutral-300 font-body antialiased">
-
-<header class="sticky top-0 z-40 bg-dark/90 backdrop-blur border-b hairline">
-  <nav class="max-w-7xl mx-auto px-4 h-20 flex items-center gap-8" aria-label="Main">
-    <a href="index.html" class="flex items-center gap-2.5 shrink-0">
-      <img src="assets/img/hammer-logo.png" alt="HammerFans" class="w-9 h-9 object-contain" width="36" height="36">
-      <span class="font-header text-2xl tracking-wide text-white">HAMMER<span class="text-primary">FANS</span></span>
-    </a>
-    <div class="hidden lg:flex items-center gap-7 text-base">
-      <a href="index.html" class="text-white border-b-2 border-primary pb-0.5" aria-current="page" data-i18n="nav.home"></a>
-      <a href="calculator.html" class="hover:text-white" data-i18n="nav.calc"></a>
-      <a href="miners.html" class="hover:text-white" data-i18n="nav.miners"></a>
-      <a href="blocks.html" class="hover:text-white" data-i18n="nav.blocks"></a>
-      <a href="learn.html" class="hover:text-white" data-i18n="nav.learn"></a>
-      <a href="about.html" class="hover:text-white" data-i18n="nav.about"></a>
-    </div>
-    <div class="ml-auto flex items-center gap-4">
-      <button type="button" class="langBtn text-base text-neutral-400 hover:text-white" aria-label="Switch language">EN</button>
-      <button type="button" id="menuBtn" class="lg:hidden p-2 text-neutral-300 hover:text-white" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
-        <span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current mb-1.5"></span><span class="block w-5 border-t border-current"></span>
-      </button>
-    </div>
-  </nav>
-  <div id="mobileMenu" class="hidden lg:hidden border-t hairline bg-panel px-4 py-3">
-    <div class="grid gap-1 text-base">
-      <a href="index.html" class="py-2 text-white" data-i18n="nav.home"></a>
-      <a href="calculator.html" class="py-2 hover:text-white" data-i18n="nav.calc"></a>
-      <a href="miners.html" class="py-2 hover:text-white" data-i18n="nav.miners"></a>
-      <a href="blocks.html" class="py-2 hover:text-white" data-i18n="nav.blocks"></a>
-      <a href="learn.html" class="py-2 hover:text-white" data-i18n="nav.learn"></a>
-      <a href="about.html" class="py-2 hover:text-white" data-i18n="nav.about"></a>
-    </div>
-  </div>
-</header>
-
+<body data-page="home">
+<div id="nav-root"></div>
 <main>
-<section class="border-b hairline">
-  <div class="max-w-7xl mx-auto px-4 pt-16 pb-16 lg:pt-24 lg:pb-20 grid lg:grid-cols-12 gap-10 items-center">
-    <div class="lg:col-span-6">
-      <h1 class="font-header text-4xl md:text-5xl lg:text-6xl text-white leading-tight tracking-tight" data-i18n="hero.h1"></h1>
-      <p class="mt-5 text-lg text-neutral-400 max-w-[38ch]" data-i18n="hero.sub"></p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="calculator.html" class="btn-press bg-primary text-black font-semibold px-6 py-3 rounded-lg hover:opacity-90" data-i18n="hero.cta1"></a>
-        <a href="blocks.html" class="btn-press border border-neutral-600 text-white px-6 py-3 rounded-lg hover:border-primary hover:text-primary" data-i18n="hero.cta2"></a>
-      </div>
+  <div class="hero" style="min-height:100vh; min-height:100svh; display:flex; align-items:center; justify-content:center; padding-bottom:90px;">
+    <div class="aurora"><!-- CSS 兜底（WebGL 不可用时显示） -->
+      <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
     </div>
-    <div class="lg:col-span-6">
-      <div class="bg-panel border hairline rounded-lg p-6">
-        <h2 class="text-sm text-neutral-400" data-i18n="hero.since"></h2>
-        <p class="num text-5xl md:text-6xl text-primary font-bold leading-none mt-2">
-          <span id="heroDays">--</span><span class="text-2xl text-neutral-400" data-i18n="hero.d"></span><span id="heroHours">--</span><span class="text-2xl text-neutral-400" data-i18n="hero.h"></span>
-        </p>
-        <div class="mt-6 grid grid-cols-3 gap-4 border-t hairline pt-5">
-          <div><p class="num text-xl text-white font-bold">137</p><p class="text-xs text-neutral-500 mt-1" data-i18n="hero.s1"></p></div>
-          <div><p class="num text-xl text-white font-bold">654 <span class="text-xs font-normal">GH/s</span></p><p class="text-xs text-neutral-500 mt-1" data-i18n="hero.s2"></p></div>
-          <div><p class="num text-xl text-white font-bold">$62,939</p><p class="text-xs text-neutral-500 mt-1" data-i18n="hero.s3"></p></div>
-        </div>
-      </div>
+    <canvas class="fx-canvas" data-fx="strong"></canvas>
+    <div class="hero-dots"></div>
+    <div class="hero-bottom-fade"></div>
+    <div class="hero-inner">
+      <h1 class="rise" style="font-size:clamp(38px,6vw,58px);">Every hash is a lottery ticket.</h1>
+      <p class="tagline rise d1">Real odds, real machines, real wins.<!-- 占位副句，Home 页设计时定稿 --></p>
     </div>
   </div>
-</section>
+  <!-- ⚠️ 以下为滚动体验示意区块，文案与内容均为占位草稿，Home 页正式设计时替换 -->
 
-<section class="border-b hairline bg-panel/40">
-  <div class="max-w-7xl mx-auto px-4 py-14 reveal">
-    <div class="flex items-end justify-between gap-4">
-      <h2 class="font-header text-2xl md:text-3xl text-white" data-i18n="quick.h2"></h2>
-      <a href="calculator.html" class="shrink-0 text-sm text-primary hover:text-white" data-i18n="quick.full"></a>
-    </div>
-    <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Miner">
-      <button type="button" data-miner="bc01" class="miner-chip btn-press border border-neutral-600 rounded-full px-4 py-2 text-sm hover:border-primary hover:text-primary" aria-pressed="false">BC 01</button>
-      <button type="button" data-miner="bc04" class="miner-chip btn-press border border-neutral-600 rounded-full px-4 py-2 text-sm hover:border-primary hover:text-primary" aria-pressed="false">BC 04</button>
-      <button type="button" data-miner="bc08" class="miner-chip btn-press border border-neutral-600 rounded-full px-4 py-2 text-sm hover:border-primary hover:text-primary" aria-pressed="false">BC 08</button>
-      <button type="button" data-miner="dc02" class="miner-chip btn-press border border-neutral-600 rounded-full px-4 py-2 text-sm hover:border-primary hover:text-primary" aria-pressed="false">DC 02</button>
-      <button type="button" data-miner="dc04" class="miner-chip btn-press border border-neutral-600 rounded-full px-4 py-2 text-sm hover:border-primary hover:text-primary" aria-pressed="false">DC 04</button>
-      <button type="button" data-miner="dc06" class="miner-chip btn-press border border-neutral-600 rounded-full px-4 py-2 text-sm hover:border-primary hover:text-primary" aria-pressed="false">DC 06</button>
-    </div>
-    <div id="quickResult" class="mt-6 hidden bg-dark border hairline rounded-lg p-5 items-center gap-8">
-      <div>
-        <p class="text-xs text-neutral-500" data-i18n="quick.model"></p>
-        <p id="qrName" class="font-header text-lg text-white mt-1">-</p>
-        <p id="qrSpec" class="num text-xs text-neutral-500 mt-0.5">-</p>
-      </div>
-      <div class="md:border-l hairline md:pl-8 mt-4 md:mt-0">
-        <p class="text-xs text-neutral-500" id="qrLabel">-</p>
-        <p class="num text-3xl text-primary font-bold mt-1" id="qrOdds">-</p>
-      </div>
+  <div class="page-wide home-section">
+    <div class="home-grid">
+      <a class="card hoverable home-card featured reveal" href="calculator.html">
+        <div class="eyebrow">Calculator</div>
+        <h3>Know your odds</h3>
+        <p>Enter your hashrate and see your real chance of finding a block, per day, per year, and over a decade.</p>
+      </a>
+      <a class="card hoverable home-card reveal" href="miners.html">
+        <div class="eyebrow">Miners</div>
+        <h3>Every machine, side by side</h3>
+        <p>Hashrate, power, noise and efficiency for every home miner we know of. No favorites, no sponsors.</p>
+      </a>
+      <a class="card hoverable home-card reveal" href="blocks.html">
+        <div class="eyebrow">Blocks</div>
+        <h3>Real people really win</h3>
+        <p>Every block ever found by a home miner, verified on-chain. The wall of proof that the lottery pays out.</p>
+      </a>
     </div>
   </div>
-</section>
 
-<section id="blocks" class="border-b hairline">
-  <div class="max-w-7xl mx-auto px-4 py-16 reveal">
-    <div class="flex items-end justify-between gap-4">
-      <div>
-        <h2 class="font-header text-2xl md:text-3xl text-white" data-i18n="wins.h2"></h2>
-      </div>
-      <a href="blocks.html" class="shrink-0 text-sm text-primary hover:text-white" data-i18n="wins.more"></a>
-    </div>
-    <div class="mt-8 grid md:grid-cols-3 gap-4">
-      <article class="bg-panel border hairline rounded-lg p-5 flex flex-col">
-        <div class="flex items-baseline justify-between"><p class="num text-xs text-neutral-500">No.137</p><p class="text-xs text-neutral-500">2026-06-27</p></div>
-        <h3 class="font-header text-lg text-white mt-2">#955,703 <span class="text-neutral-500 text-sm font-body">CKPool Solo</span></h3>
-        <div class="mt-auto pt-4 flex items-baseline justify-between border-t hairline">
-          <span class="num text-primary font-bold">3.1553 BTC</span>
-          <span class="num text-xs text-neutral-500">$198,589 · 111 PH/s</span></div>
-      </article>
-      <article class="bg-panel border hairline rounded-lg p-5 flex flex-col">
-        <div class="flex items-baseline justify-between"><p class="num text-xs text-neutral-500">No.129</p><p class="text-xs text-neutral-500">2025-10-27</p></div>
-        <h3 class="font-header text-lg text-white mt-2">#920,440 <span class="text-neutral-500 text-sm font-body">Public Pool</span></h3>
-        <div class="mt-auto pt-4 flex items-baseline justify-between border-t hairline">
-          <span class="num text-primary font-bold">~3.14 BTC</span>
-          <span class="num text-xs text-neutral-500">~$342,000 · ~4.2 TH/s</span></div>
-      </article>
-      <article class="bg-panel border hairline rounded-lg p-5 flex flex-col">
-        <div class="flex items-baseline justify-between"><p class="num text-xs text-neutral-500">No.112</p><p class="text-xs text-neutral-500">2025-03-23</p></div>
-        <h3 class="font-header text-lg text-white mt-2">#889,975 <span class="text-neutral-500 text-sm font-body">CKPool Solo</span></h3>
-        <div class="mt-auto pt-4 flex items-baseline justify-between border-t hairline">
-          <span class="num text-primary font-bold">3.149 BTC</span>
-          <span class="num text-xs text-neutral-500">~$265,000 · ~1.2 TH/s</span></div>
-      </article>
+  <div class="page-wide home-section" style="position:relative;">
+    <div class="glow-spot" style="top:-30px;left:50%;transform:translateX(-50%);width:700px;height:340px;"></div>
+    <div class="stat-row">
+      <div class="reveal"><div class="stat-num mono">1,019</div><div class="stat-label">EH/s. The network you face</div></div>
+      <div class="reveal"><div class="stat-num mono">3.125</div><div class="stat-label">BTC. The prize per block</div></div>
+      <div class="reveal"><div class="stat-num mono">10 min</div><div class="stat-label">A new draw, every single one</div></div>
     </div>
   </div>
-</section>
 
-<section id="miners" class="border-b hairline bg-panel/40">
-  <div class="max-w-7xl mx-auto px-4 py-16 reveal">
-    <div class="flex items-end justify-between gap-4">
-      <div>
-        <h2 class="font-header text-2xl md:text-3xl text-white" data-i18n="cmp.h2"></h2>
-      </div>
-      <a href="miners.html" class="shrink-0 text-sm text-primary hover:text-white" data-i18n="cmp.more"></a>
-    </div>
-    <div class="mt-8 overflow-x-auto">
-      <table class="w-full text-sm min-w-[720px]">
-        <thead>
-          <tr class="text-left text-sm text-neutral-400 border-b hairline">
-            <th class="py-3 pr-4 font-normal" data-i18n="cmp.c1"></th><th class="py-3 pr-4 font-normal" data-i18n="cmp.c2"></th>
-            <th class="py-3 pr-4 font-normal" data-i18n="cmp.c3"></th><th class="py-3 pr-4 font-normal" data-i18n="cmp.c4"></th>
-            <th class="py-3 pr-4 font-normal" data-i18n="cmp.c5"></th><th class="py-3 font-normal" data-i18n="cmp.c6"></th>
-          </tr>
-        </thead>
-        <tbody class="num" id="previewRows"></tbody>
-      </table>
+  <div class="page-wide home-section">
+    <div class="card cta-card reveal" style="position:relative; overflow:hidden;">
+      <div class="glow-spot" style="top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;"></div>
+      <h2>Your miner is holding tickets right now.</h2>
+      <p>Find out exactly how many, and what the jackpot is worth today.</p>
+      <a class="btn" style="display:block; text-decoration:none;" href="calculator.html">Calculate your odds →</a>
     </div>
   </div>
-</section>
-
-<section id="learn" class="border-b hairline">
-  <div class="max-w-7xl mx-auto px-4 py-16 reveal">
-    <h2 class="font-header text-2xl md:text-3xl text-white" data-i18n="learn.h2"></h2>
-    <div class="mt-8 grid lg:grid-cols-12 gap-8">
-      <div class="lg:col-span-5">
-        <img src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=900&q=80" alt="Bitcoin" class="w-full aspect-[16/10] object-cover rounded-lg border hairline" loading="lazy" width="900" height="560">
-      </div>
-      <div class="lg:col-span-7">
-        <ul>
-          <li class="border-b hairline"><a href="learn.html" class="flex items-baseline justify-between gap-4 py-4 group">
-            <span class="text-white group-hover:text-primary" data-i18n="learn.l1"></span><span class="text-xs text-neutral-600 shrink-0" data-i18n="learn.tagFaq"></span></a></li>
-          <li class="border-b hairline"><a href="learn.html" class="flex items-baseline justify-between gap-4 py-4 group">
-            <span class="text-white group-hover:text-primary" data-i18n="learn.l2"></span><span class="text-xs text-neutral-600 shrink-0" data-i18n="learn.tagFaq"></span></a></li>
-          <li class="border-b hairline"><a href="learn.html" class="flex items-baseline justify-between gap-4 py-4 group">
-            <span class="text-white group-hover:text-primary" data-i18n="learn.l3"></span><span class="text-xs text-neutral-600 shrink-0" data-i18n="learn.tagGuide"></span></a></li>
-          <li><a href="learn.html" class="flex items-baseline justify-between gap-4 py-4 group">
-            <span class="text-white group-hover:text-primary" data-i18n="learn.l4"></span><span class="text-xs text-neutral-600 shrink-0" data-i18n="learn.tagGuide"></span></a></li>
-        </ul>
-        <a href="learn.html" class="inline-block mt-4 text-sm text-primary hover:text-white" data-i18n="learn.all"></a>
-      </div>
-    </div>
-  </div>
-</section>
-
 </main>
-
-<footer class="border-t hairline bg-panel">
-  <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
-    <div>
-      <p class="font-header text-lg text-white">HAMMER<span class="text-primary">FANS</span></p>
-      <p class="mt-3 text-neutral-500 leading-relaxed" data-i18n="footer.tag"></p>
-    </div>
-    <div>
-      <p class="text-neutral-400 mb-3" data-i18n="footer.site"></p>
-      <div class="grid grid-cols-2 gap-2 text-neutral-500">
-        <a href="calculator.html" class="hover:text-primary" data-i18n="nav.calc"></a>
-        <a href="miners.html" class="hover:text-primary" data-i18n="nav.miners"></a>
-        <a href="blocks.html" class="hover:text-primary" data-i18n="nav.blocks"></a>
-        <a href="learn.html" class="hover:text-primary" data-i18n="nav.learn"></a>
-      </div>
-    </div>
-    <div>
-      <p class="text-neutral-400 mb-3" data-i18n="footer.legal"></p>
-      <p class="text-neutral-500 leading-relaxed text-xs" data-i18n="footer.disc"></p>
-    </div>
-  </div>
-  <div class="border-t hairline"><p class="max-w-7xl mx-auto px-4 py-4 text-xs text-neutral-600">2026 HammerFans</p></div>
-</footer>
-
-<script>
-window.HF_PAGE_DICT = {
-  zh: {
-    'hero.h1':'你的矿机，离 <span class="text-primary num">3.125 BTC</span> 有多远？',
-    'hero.sub':'算概率、比矿机、看每一次家庭矿工中奖。',
-    'hero.cta1':'算算我的概率','hero.cta2':'看谁中过奖',
-    'hero.since':'距上一次家庭矿工中块','hero.d':' 天 ','hero.h':' 时',
-    'hero.s1':'家庭矿工累计中块','hero.s2':'最小中块算力纪录','hero.s3':'BTC 价格',
-    'quick.h2':'30 秒，算出你的中奖概率',
-    'quick.model':'机型','quick.full':'完整计算','quick.lblBtc':'每天中 BTC 块概率','quick.lblDoge':'每天中 DOGE 块概率',
-    'wins.h2':'最新开奖','wins.more':'进入中奖墙',
-    'cmp.h2':'矿机对比','cmp.more':'完整对比表',
-    'cmp.c1':'机型','cmp.c2':'算法','cmp.c3':'算力','cmp.c4':'功耗','cmp.c5':'噪音','cmp.c6':'参考价',
-    'learn.h2':'新手从这里开始',
-    'learn.l1':'家庭矿机能回本吗？说实话：几乎不能','learn.l2':'挖了三年，是不是离中奖更近了？不是',
-    'learn.l3':'Solo 还是矿池？两种玩法一次讲清','learn.l4':'BTC 矿机与 DOGE 矿机：概率差几个数量级的两种彩票',
-    'learn.tagFaq':'实话实说','learn.tagGuide':'入门路径','learn.all':'全部文章',
-  },
-  en: {
-    'hero.h1':'How far is your miner from <span class="text-primary num">3.125 BTC</span>?',
-    'hero.sub':'Calculate your solo odds, compare home miners and follow every block win.',
-    'hero.cta1':'Check My Odds','hero.cta2':'See Who Won',
-    'hero.since':'Since the last home-miner block','hero.d':' d ','hero.h':' h',
-    'hero.s1':'Home-miner blocks found','hero.s2':'Smallest winning hashrate','hero.s3':'BTC price',
-    'quick.h2':'Your odds in 30 seconds',
-    'quick.model':'Model','quick.full':'Full Calculator','quick.lblBtc':'Daily BTC block odds','quick.lblDoge':'Daily DOGE block odds',
-    'wins.h2':'Latest wins','wins.more':'Open the wall',
-    'cmp.h2':'Compare Miners','cmp.more':'Full comparison',
-    'cmp.c1':'Model','cmp.c2':'Algorithm','cmp.c3':'Hashrate','cmp.c4':'Power','cmp.c5':'Noise','cmp.c6':'Price',
-    'learn.h2':'Start here',
-    'learn.l1':'Will a home miner pay for itself? Honestly: almost never','learn.l2':'Mining for three years. Am I closer to winning? No',
-    'learn.l3':'Solo or pool? Both games explained once','learn.l4':'BTC vs DOGE miners: two lotteries, odds apart by orders of magnitude',
-    'learn.tagFaq':'Honest FAQ','learn.tagGuide':'Beginner path','learn.all':'All articles',
-  }
-};
-</script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
-<script>
-// 快速概率
-const QUICK = { bc01:HF_MINERS[0], bc04:HF_MINERS[1], bc08:HF_MINERS[2], dc02:HF_MINERS[3], dc04:HF_MINERS[4], dc06:HF_MINERS[5] };
-let quickSel = null;
-document.querySelectorAll('.miner-chip').forEach(chip=>{
-  chip.addEventListener('click', ()=>{
-    document.querySelectorAll('.miner-chip').forEach(c=>{ c.classList.remove('border-primary','text-primary','bg-primary/10'); c.setAttribute('aria-pressed','false'); });
-    chip.classList.add('border-primary','text-primary','bg-primary/10'); chip.setAttribute('aria-pressed','true');
-    quickSel = chip.dataset.miner; renderQuick();
-    const box = document.getElementById('quickResult'); box.classList.remove('hidden'); box.classList.add('md:flex');
-
-  });
-});
-function renderQuick(){
-  if(!quickSel) return;
-  const m = QUICK[quickSel];
-  document.getElementById('qrName').textContent = m.brand+' '+m.model;
-  document.getElementById('qrSpec').textContent = m.hDisp+' / '+m.watts+'W';
-  document.getElementById('qrLabel').textContent = t(m.algo==='sha256' ? 'quick.lblBtc' : 'quick.lblDoge');
-  document.getElementById('qrOdds').textContent = fmtOdds(minerDailyOdds(m));
-}
-function renderPreview(){
-  const ids = ['bc04','nano3s','bitaxe-gamma','dc06','minidoge3'];
-  document.getElementById('previewRows').innerHTML = ids.map(id=>{
-    const m = HF_MINERS.find(x=>x.id===id);
-    const name = m.hammer ? '<span class="text-primary font-semibold">'+m.brand+' '+m.model+'</span>' : '<span class="text-white">'+m.brand+' '+m.model+'</span>';
-    return '<tr class="border-b hairline'+(m.hammer?' bg-primary/5':'')+'">'+
-      '<td class="py-3 pr-4 font-body">'+name+'</td>'+
-      '<td class="py-3 pr-4 text-neutral-400">'+(m.algo==='sha256'?'SHA-256':'Scrypt')+'</td>'+
-      '<td class="py-3 pr-4 text-white">'+m.hDisp+'</td>'+
-      '<td class="py-3 pr-4">'+m.watts+'W</td>'+
-      '<td class="py-3 pr-4">'+m.noiseTxt+'</td>'+
-      '<td class="py-3">$'+m.price+'</td></tr>';
-  }).join('');
-}
-window.onLangChange = function(){ renderPreview(); renderQuick(); };
-renderPreview();
-</script>
+<div id="foot-root"></div>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/colorbends.js"></script>
 </body>
 </html>
