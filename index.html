@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeMining | The Independent Home of Solo Bitcoin Mining</title>
+<meta name="description" content="Real odds, real machines, real wins. An independent site for home Bitcoin miners.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="home">
+<div id="nav-root"></div>
+<main>
+  <div class="hero" style="min-height:100vh; min-height:100svh; display:flex; align-items:center; justify-content:center; padding-bottom:90px;">
+    <div class="aurora"><!-- CSS 兜底（WebGL 不可用时显示） -->
+      <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
+    </div>
+    <canvas class="fx-canvas" data-fx="strong"></canvas>
+    <div class="hero-dots"></div>
+    <div class="hero-bottom-fade"></div>
+    <div class="hero-inner">
+      <h1 class="rise" style="font-size:clamp(38px,6vw,58px);">Every hash is a lottery ticket.</h1>
+      <p class="tagline rise d1">Real odds, real machines, real wins.<!-- 占位副句，Home 页设计时定稿 --></p>
+    </div>
+  </div>
+  <!-- ⚠️ 以下为滚动体验示意区块，文案与内容均为占位草稿，Home 页正式设计时替换 -->
+
+  <div class="page-wide home-section">
+    <div class="home-grid">
+      <a class="card hoverable home-card featured reveal" href="calculator.html">
+        <div class="eyebrow">Calculator</div>
+        <h3>Know your odds</h3>
+        <p>Enter your hashrate and see your real chance of finding a block, per day, per year, and over a decade.</p>
+      </a>
+      <a class="card hoverable home-card reveal" href="miners.html">
+        <div class="eyebrow">Miners</div>
+        <h3>Every machine, side by side</h3>
+        <p>Hashrate, power, noise and efficiency for every home miner we know of. No favorites, no sponsors.</p>
+      </a>
+      <a class="card hoverable home-card reveal" href="blocks.html">
+        <div class="eyebrow">Blocks</div>
+        <h3>Real people really win</h3>
+        <p>Every block ever found by a home miner, verified on-chain. The wall of proof that the lottery pays out.</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="page-wide home-section" style="position:relative;">
+    <div class="glow-spot" style="top:-30px;left:50%;transform:translateX(-50%);width:700px;height:340px;"></div>
+    <div class="stat-row">
+      <div class="reveal"><div class="stat-num mono">1,019</div><div class="stat-label">EH/s. The network you face</div></div>
+      <div class="reveal"><div class="stat-num mono">3.125</div><div class="stat-label">BTC. The prize per block</div></div>
+      <div class="reveal"><div class="stat-num mono">10 min</div><div class="stat-label">A new draw, every single one</div></div>
+    </div>
+  </div>
+
+  <div class="page-wide home-section">
+    <div class="card cta-card reveal" style="position:relative; overflow:hidden;">
+      <div class="glow-spot" style="top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;"></div>
+      <h2>Your miner is holding tickets right now.</h2>
+      <p>Find out exactly how many, and what the jackpot is worth today.</p>
+      <a class="btn" style="display:block; text-decoration:none;" href="calculator.html">Calculate your odds →</a>
+    </div>
+  </div>
+</main>
+<div id="foot-root"></div>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/colorbends.js"></script>
+</body>
+</html>

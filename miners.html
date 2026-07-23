@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miners | HomeMining</title>
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="miners">
+<div id="nav-root"></div>
+<main>
+  <div class="hero">
+    <div class="f-mist f-mist1"></div>
+    <div class="f-mist f-mist2"></div>
+    <div class="hero-inner">
+      <h1 class="rise">Miners</h1>
+      <p class="tagline rise d1">Mining never needed a warehouse. Find the machine that fits your home.</p>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- 视图层（2026-07-22 三版）：币种分段开关独立一行 = 决定"看哪张表" -->
+    <div class="m-viewrow rise d2">
+      <div class="m-chips">
+        <button type="button" class="m-chip active" data-coin="all">All</button>
+        <button type="button" class="m-chip" data-coin="btc">Bitcoin</button>
+        <button type="button" class="m-chip" data-coin="alt">Altcoin</button>
+      </div>
+    </div>
+
+    <!-- 工具层：在当前视图里精筛（类别 / 厂商 / 搜索）；所有计数随其它条件联动 -->
+    <div class="card m-toolbar rise d2">
+      <div class="m-filterbar">
+        <div class="m-dd" id="dd-type">
+          <button type="button" class="m-dd-btn" aria-haspopup="true" aria-expanded="false">All types</button>
+          <div class="m-dd-panel"></div>
+        </div>
+        <div class="m-dd" id="dd-brand">
+          <button type="button" class="m-dd-btn" aria-haspopup="true" aria-expanded="false">All manufacturers</button>
+          <div class="m-dd-panel"></div>
+        </div>
+        <div class="m-dd" id="dd-algo">
+          <button type="button" class="m-dd-btn" aria-haspopup="true" aria-expanded="false">All algorithms</button>
+          <div class="m-dd-panel"></div>
+        </div>
+        <input id="m-search" type="search" placeholder="Search brand or model" autocomplete="off" aria-label="Search miners">
+      </div>
+    </div>
+
+    <!-- 表格参数行：左=结果计数，右=电价（计算参数，不是筛选器，故与筛选带分离） -->
+    <div class="m-meta rise d3">
+      <span id="m-count" class="mono"></span>
+      <button id="m-clear" class="m-clear hidden" type="button" onclick="MinersPage.clear()">Clear filters</button>
+      <label class="m-elec" for="elec-input">Electricity
+        <span class="m-elec-box">$<input id="elec-input" type="number" min="0" step="0.01" inputmode="decimal">/ kWh</span>
+      </label>
+    </div>
+
+    <div class="m-tablewrap rise d3">
+      <table class="m-table">
+        <thead>
+          <tr>
+            <th>Miner</th>
+            <th data-sort="hashrate">Hashrate <span class="arr">▼</span></th>
+            <th data-sort="power">Power <span class="arr">▼</span></th>
+            <th data-sort="noise">Noise <span class="arr">▼</span></th>
+            <th>Algorithm</th>
+            <th class="th-center">Coin</th>
+            <th data-sort="released">Released <span class="arr">▼</span></th>
+            <th class="th-center" data-sort="earn">Earnings <small>sats/mo</small> <span class="arr">▼</span></th>
+            <th class="th-center" data-sort="cost">Power cost <small>$/mo</small> <span class="arr">▼</span></th>
+          </tr>
+        </thead>
+        <tbody id="m-body"></tbody>
+      </table>
+    </div>
+
+    <div class="m-pager" id="m-pager"></div>
+
+    <p class="m-note rise d4">Earnings are rough estimates for Bitcoin miners only, before pool fees. <span id="m-updated"></span></p>
+
+  </div>
+</main>
+<div id="foot-root"></div>
+<script src="assets/js/format.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/components.js"></script>
+<script src="assets/data/miners-data.js"></script>
+<script src="assets/js/miners.js"></script>
+</body>
+</html>
